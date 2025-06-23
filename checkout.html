@@ -425,25 +425,43 @@
       var info = JSON.parse(localStorage.getItem('infoCliente')||'{}');
 
       if (pagoSeleccionado === 'MercadoPago') {
-        // ARMAR ITEMS y TOTAL para MP
-        if (!cart.length) return alert('Carrito vacío');
-        var items = cart.map(function(p){
-          return {
-            title: p.producto,
-            quantity: p.cantidad||1,
-            unit_price: Math.round(p.csi_cem||p.costo||0)
-          };
-        });
-        // 1) creo preferencia en mi backend
-        var resp = await fetch('https://mundofranchi.onrender.com/create_preference', {
-          method: 'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify({ items })
-        });
-        var { init_point } = await resp.json();
-        window.location.href = init_point;
-        return;
-      }
+  // ARMAR ITEMS y TOTAL para MP
+  if (!cart.length) return alert('Carrito vacío');
+
+  var items = cart.map(function(p){
+    return {
+      title: p.producto,
+      quantity: p.cantidad || 1,
+      unit_price: Math.round(p.csi_cem || p.costo || 0)
+    };
+  });
+
+  try {
+    const resp = await fetch('https://mundofranchi.onrender.com/create_preference', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items })
+    });
+
+    const data = await resp.json();
+    console.log("📦 Respuesta de create_preference:", data);
+
+    if (!resp.ok || !data.init_point) {
+      alert("❌ No se pudo crear la preferencia de pago.");
+      console.error("Detalle del error:", data);
+      return;
+    }
+
+    window.location.href = data.init_point;
+
+  } catch (error) {
+    alert("❌ Error al conectar con el backend.");
+    console.error("🔴 Error en fetch:", error);
+  }
+
+  return;
+}
+
 
       // Si elegí Tarjeta o Transferencia, guardo en Firestore
       try {
