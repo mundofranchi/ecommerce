@@ -59,9 +59,12 @@ app.post('/create_preference', async (req, res) => {
     });
 
   } catch (err) {
-    console.error('🚨 Error en create_preference:', err);
-    res.status(500).json({ error: err.toString(), stack: err.stack });
-  }
+  console.error('🚨 Error en create_preference:', err);
+  return res.status(500).json({
+    error: err.message || 'Error desconocido',
+    detalles: err,
+  });
+}
 });
 
 // 🚀 Levantar servidor
