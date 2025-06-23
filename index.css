@@ -1,0 +1,506 @@
+/* styles.css - Estilos ultra-pro para Mundo Franchi */
+
+/* Importar tipografías */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* Variables de color y tipografía */
+:root {
+  --clr-primary: #f15a24;
+  --clr-dark: #111111;
+  --clr-light: #f4f4f4;
+  --clr-gray: #888888;
+  --clr-white: #ffffff;
+  --font-base: 'Montserrat', sans-serif;
+  --transition-fast: 0.2s ease-in-out;
+  --transition-medium: 0.4s ease-in-out;
+  --border-radius: 8px;
+}
+
+/* Reset básico */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-base);
+  background: var(--clr-light);
+  color: var(--clr-dark);
+  line-height: 1.6;
+}
+
+/* Scrollbar custom */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--clr-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--clr-gray);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-primary);
+}
+
+/* LIGADO GLOBAL */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--clr-primary);
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* NAVBAR */
+nav.navbar {
+  background: var(--clr-dark) !important;
+  padding: 1rem 2rem;
+}
+nav .navbar-brand {
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--clr-primary) !important;
+}
+nav .navbar-nav .nav-link {
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  color: var(--clr-primary) !important;
+}
+nav .navbar-nav .nav-link:hover {
+  color: var(--clr-dark) !important;
+}
+nav .search-bar input {
+  border-radius: 50px 0 0 50px;
+  border: none;
+  padding: 0.5rem 1rem;
+  width: 200px;
+}
+nav .search-bar button {
+  border-radius: 0 50px 50px 0;
+  border: none;
+  background: var(--clr-primary);
+  color: var(--clr-dark);
+  padding: 0.5rem 1.2rem;
+}
+
+/* HERO SLIDER */
+.hero-carousel {
+  position: relative;
+  overflow: hidden;
+}
+.hero-carousel img {
+  width: 100%;
+  height: 550px;
+  object-fit: cover;
+  filter: brightness(0.5);
+  transition: transform var(--transition-medium);
+}
+.hero-carousel .carousel-item.active img {
+  transform: scale(1.05);
+}
+.hero-caption {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  color: var(--clr-white);
+  max-width: 500px;
+}
+.hero-caption h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+.hero-caption p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.hero-caption .btn-primary {
+  background: var(--clr-primary);
+  color: var(--clr-dark);
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.hero-caption .btn-primary:hover {
+  background: darken(var(--clr-primary), 5%);
+  transform: translateY(-2px);
+}
+
+/* BENEFICIOS */
+#beneficios {
+  background: var(--clr-white);
+  padding: 3rem 0;
+}
+#beneficios .icon {
+  font-size: 2.5rem;
+  color: var(--clr-primary);
+  margin-right: 1rem;
+}
+#beneficios h5 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+#beneficios small {
+  color: var(--clr-gray);
+}
+
+/* ===========================
+   BLOQUE ULTRA-PRO: CATEGORÍAS
+   =========================== */
+
+/* Sección de categorías */
+#categorias {
+  padding: 4rem 0;
+  background: var(--clr-white);
+}
+#categorias .section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--clr-dark);
+}
+
+/* Carousel de categorías: mostramos 3 cards por slide */
+#categoriasCarousel {
+  position: relative;
+}
+#categoriasCarousel .carousel-inner {
+  overflow: visible; /* se ven ligeramente las cards adyacentes */
+}
+#categoriasCarousel .carousel-item {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Card individual de categoría */
+.categoria-card {
+  width: 280px;
+  border: none;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  background: var(--clr-white);
+}
+.categoria-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+/* Imagen dentro de la card */
+.categoria-card .card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Pie de la card */
+.categoria-card .card-body {
+  background: var(--clr-primary);
+  color: var(--clr-dark);
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Placeholder para mantener 3 items siempre */
+#categoriasCarousel .invisible {
+  visibility: hidden;
+}
+
+/* Controles del carousel sobre la sección */
+#categoriasCarousel .carousel-control-prev,
+#categoriasCarousel .carousel-control-next {
+  width: 3rem;
+  height: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#categoriasCarousel .carousel-control-prev-icon,
+#categoriasCarousel .carousel-control-next-icon {
+  filter: invert(100%);
+  width: 100%;
+  height: 100%;
+}
+
+/* Ajustes responsivos para tablets y móviles */
+@media (max-width: 992px) {
+  .categoria-card { width: 240px; }
+}
+@media (max-width: 768px) {
+  .categoria-card { width: 200px; }
+}
+@media (max-width: 576px) {
+  #categoriasCarousel .carousel-inner,
+  #categoriasCarousel .carousel-item {
+    display: block;
+  }
+  .categoria-card {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+
+/* MARCAS */
+#marcas {
+  background: var(--clr-dark);
+}
+#marcas .section-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+#marcas .carousel-inner {
+  padding: 1rem 0;
+}
+#marcas .carousel-item .row {
+  align-items: center;
+}
+.marca-logo {
+  max-width: 100%;
+  max-height: 80px;
+  margin: 0 auto;
+  filter: grayscale(100%) brightness(1.2);
+  transition: filter 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+.marca-logo:hover {
+  filter: grayscale(0) brightness(1);
+  transform: scale(1.1);
+}
+/* columnas vacías para centrar slides con menos de 3 logos */
+.empty-col {
+  visibility: hidden;
+}
+/* Personalizar flechas */
+#marcas .carousel-control-prev-icon,
+#marcas .carousel-control-next-icon {
+  filter: invert(100%);
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .marca-logo {
+    max-height: 60px;
+  }
+}
+
+/* PROMO BANNER */
+.promo-ferre {
+  position: relative;
+  margin: 4rem 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+.promo-ferre img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  filter: brightness(0.4);
+}
+.promo-ferre .content {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+  text-align: right;
+  color: var(--clr-white);
+  max-width: 450px;
+}
+.promo-ferre .content h2 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.promo-ferre .content p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.promo-ferre .content .btn-warning {
+  background: var(--clr-primary);
+  color: var(--clr-dark);
+  font-weight: 700;
+  padding: 0.8rem 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.promo-ferre .content .btn-warning:hover {
+  background: darken(var(--clr-primary), 5%);
+  transform: translateY(-2px);
+}
+
+/* PRODUCTOS */
+#productos {
+  padding: 4rem 0;
+}
+#productos .section-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+.producto-card {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+}
+.producto-card img {
+  height: 220px;
+  object-fit: contain;
+  padding: 1rem;
+}
+.producto-card .card-body {
+  text-align: center;
+  padding: 1rem;
+}
+.producto-card h5 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.producto-card .price {
+  font-size: 1.3rem;
+  color: var(--clr-primary);
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+.producto-card .btn-outline-primary {
+  border-radius: 50px;
+  border-color: var(--clr-primary);
+  color: var(--clr-primary);
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.producto-card .btn-outline-primary:hover {
+  background: var(--clr-primary);
+  color: var(--clr-dark);
+}
+
+/* ------------ BTN COMPRAR AHORA ULTRA PRO ------------ */
+.btn-comprar-ahora {
+  /* colores y tipografía */
+  background-color: var(--clr-primary);
+  color: var(--clr-dark);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  /* espaciamiento y forma */
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  border: none;
+  
+  /* sombra y transición */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: 
+    background-color 0.3s ease-in-out,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+
+/* efecto hover: levantado y color más intenso */
+.btn-comprar-ahora:hover {
+  background-color: #e14e1f; /* un toquecito más oscuro */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+/* efecto al hacer click: vuelve a posición original */
+.btn-comprar-ahora:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* foco accesible */
+.btn-comprar-ahora:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(241,90,36,0.5);
+}
+
+
+/* CAROUSEL CONTROLS CUSTOM */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(100%);
+  width: 2rem;
+  height: 2rem;
+}
+
+/* NOSOTROS */
+#nosotros {
+  padding: 3rem 0;
+}
+#nosotros .section-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* FOOTER */
+footer {
+  background: var(--clr-dark);
+  color: var(--clr-light);
+  padding: 3rem 0;
+}
+footer h5 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+footer small {
+  color: var(--clr-gray);
+}
+footer a {
+  color: var(--clr-primary);
+  transition: color var(--transition-fast);
+}
+footer a:hover {
+  color: var(--clr-white);
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .hero-caption h1 { font-size: 2.4rem; }
+  .promo-ferre .content h2 { font-size: 2.2rem; }
+}
+@media (max-width: 768px) {
+  .hero-carousel img { height: 350px; }
+  .hero-caption { left: 5%; }
+  .promo-ferre img { height: 260px; }
+}
+@media (max-width: 576px) {
+  nav .search-bar input { width: 120px; }
+  .hero-caption h1 { font-size: 1.8rem; }
+  #categorias .section-title,
+  #productos .section-title { font-size: 2rem; }
+  #categoriasCarousel .carousel-item,
+  .marcas-carousel .carousel-item { flex-direction: column; gap: 1rem; }
+}

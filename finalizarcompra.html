@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Finalizar Compra | Mundo Franchi</title>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --gris-oscuro: #666;
+      --blanco:  #fff;
+      --font: 'Montserrat', sans-serif;
+      --radius: .5rem;
+      --trans: .3s ease;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: var(--font);
+      background: var(--gris-claro);
+      color: var(--negro);
+      line-height: 1.5;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { display:block; max-width:100%; }
+
+    /* NAVBAR */
+    nav.navbar {
+      background: var(--negro)!important;
+      padding:1rem 2rem;
+    }
+    .navbar-brand {
+      font-weight:700; font-size:1.8rem;
+      color: var(--naranja)!important;
+    }
+    .navbar-nav .nav-link {
+      color:#fff!important; margin-right:1rem;
+      transition: color var(--trans);
+    }
+    .navbar-nav .nav-link:hover {
+      color: var(--naranja)!important;
+    }
+    .search-bar input {
+      border-radius:50px 0 0 50px; border:none;
+      padding:.5rem 1rem; width:200px;
+    }
+    .search-bar button {
+      border-radius:0 50px 50px 0; border:none;
+      background:var(--naranja); color:var(--negro);
+      padding:.5rem 1rem;
+    }
+
+    /* TÍTULO */
+    .page-title {
+      text-align:center;
+      font-size:2.5rem; font-weight:700;
+      margin:2rem 0 1rem;
+    }
+
+    /* TABLA DE ITEMS */
+    .checkout-table {
+      background: var(--blanco);
+      border-radius: var(--radius);
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      overflow:hidden;
+      margin-bottom:1.5rem;
+    }
+    .checkout-table table {
+      margin:0;
+    }
+    .checkout-table thead {
+      background: var(--naranja);
+      color: var(--blanco);
+    }
+    .checkout-table th,
+    .checkout-table td {
+      vertical-align: middle!important;
+      padding: .75rem 1rem!important;
+    }
+    .checkout-table tbody tr:hover {
+      background: rgba(241,90,36,0.05);
+    }
+    .item-img {
+      width: 60px; height: 60px;
+      object-fit: cover; border-radius: var(--radius);
+    }
+
+    /* RESUMEN */
+    .summary-card {
+      background: var(--blanco);
+      border-radius: var(--radius);
+      box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      padding:1.5rem;
+      position: sticky; top: 20px;
+    }
+    .summary-card h5 {
+      font-size:1.25rem; font-weight:600;
+      margin-bottom:1rem;
+    }
+    .summary-list {
+      list-style:none; padding:0; margin:0 0 1.5rem;
+    }
+    .summary-list li {
+      display:flex; justify-content:space-between;
+      margin-bottom:.75rem; font-weight:500;
+    }
+    .summary-list li span:last-child {
+      font-weight:700;
+    }
+    .btn-confirm {
+      width:100%;
+      background: var(--naranja);
+      color: var(--negro);
+      font-weight:600;
+      padding:.75rem;
+      border:none;
+      border-radius: var(--radius);
+      transition: background var(--trans);
+    }
+    .btn-confirm:hover {
+      background: #db500f;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--negro);
+      color: var(--gris-claro);
+      padding:2rem; margin-top:2rem;
+    }
+    footer h5 { font-weight:600; margin-bottom:.5rem; }
+    footer a { color: var(--naranja); transition: color var(--trans); }
+    footer a:hover { color: #fff; }
+
+    @media(max-width:768px){
+      .search-bar input { width:120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
+          <li class="nav-item"><a class="nav-link" href="producto-categoria.html">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <form class="d-flex search-bar me-3">
+          <input class="form-control" type="search" placeholder="Buscar…">
+          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex">
+          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TÍTULO -->
+  <h1 class="page-title">Finalizar Compra</h1>
+
+  <div class="container">
+    <div class="row gx-4">
+      <!-- TABLA DE PRODUCTOS -->
+      <div class="col-lg-8">
+        <div class="checkout-table">
+          <table class="table mb-0">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Marca</th>
+                <th>Detalle</th>
+                <th>Cant.</th>
+                <th>Precio</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="checkout-items">
+              <!-- filas inyectadas vía JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RESUMEN DE PAGO -->
+      <div class="col-lg-4">
+        <div class="summary-card">
+          <h5>Resumen de Compra</h5>
+          <ul class="summary-list">
+            <li>Subtotal <span id="subtotal">$0</span></li>
+            <li>Envío <span id="envio">Gratis</span></li>
+            <li>Total <span id="total">$0</span></li>
+          </ul>
+          <button class="btn-confirm" onclick="confirmarPedido()">Confirmar Compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row text-center text-md-start gy-4">
+        <div class="col-md-4">
+          <h5>Mundo Franchi</h5>
+          <p>Distribuidor oficial de herramientas profesionales en Argentina.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <p>📞 11 2233 4455<br>📧 info@mundofranchi.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <p><a href="#">Instagram</a> | <a href="#">Facebook</a> | <a href="#">WhatsApp</a></p>
+        </div>
+      </div>
+      <div class="text-center mt-4"><small>&copy; 2025 Mundo Franchi. Todos los derechos reservados.</small></div>
+    </div>
+  </footer>
+
+  <!-- LÓGICA JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+      const $tbody = document.getElementById('checkout-items');
+      let subtotal = 0;
+
+      if (cart.length === 0) {
+        $tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Tu carrito está vacío.</td></tr>';
+      } else {
+        cart.forEach(p => {
+          // extraer datos
+          const title = p.producto || 'Sin nombre';
+          const brand = p.marca || '-';
+          const detail = p.caracteristica || '';
+          const img64 = p.imagen1_base64 || '';
+          const price = Math.round(p.csi_cem || p.costo || 0);
+          subtotal += price;
+          const row = `
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="data:image/jpeg;base64,${img64}" alt="${title}" class="item-img me-2">
+                  <div>${title}</div>
+                </div>
+              </td>
+              <td>${brand}</td>
+              <td>${detail}</td>
+              <td>1</td>
+              <td>$${price.toLocaleString()}</td>
+              <td>$${price.toLocaleString()}</td>
+            </tr>`;
+          $tbody.insertAdjacentHTML('beforeend', row);
+        });
+      }
+
+            envioValue = 0,
+            totalValue = subtotal + envioValue;
+
+      document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString();
+      document.getElementById('envio').textContent   = envioValue === 0 ? 'Gratis' : '$' + envioValue.toLocaleString();
+      document.getElementById('total').textContent   = '$' + totalValue.toLocaleString();
+    });
+
+    function confirmarPedido() {
+      // Aquí podrías llamar a tu API o similar
+      window.location.href = 'checkout.html';
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

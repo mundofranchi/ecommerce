@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos | Mundo Franchi</title>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --gris-oscuro: #666;
+      --blanco:  #fff;
+      --font: 'Montserrat', sans-serif;
+      --radius: .5rem;
+      --trans: .3s ease;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family: var(--font);
+      background: var(--gris-claro);
+      color: var(--negro);
+      line-height:1.5;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { display:block; width:100%; }
+
+    /* NAVBAR */
+    nav.navbar {
+      background: var(--negro)!important;
+      padding:1rem 2rem;
+    }
+    .navbar-brand {
+      font-weight:700; font-size:1.8rem;
+      color: var(--naranja)!important;
+    }
+    .navbar-nav .nav-link {
+      color:#fff!important; margin-right:1rem;
+      transition:color var(--trans);
+    }
+    .navbar-nav .nav-link:hover {
+      color: var(--naranja)!important;
+    }
+    .search-bar input {
+      border-radius:50px 0 0 50px;
+      border:none; padding:.5rem 1rem; width:200px;
+    }
+    .search-bar button {
+      border-radius:0 50px 50px 0;
+      border:none; background:var(--naranja);
+      color:var(--negro); padding:.5rem 1rem;
+    }
+
+    /* LAYOUT */
+    .container-fluid { max-width:1400px; }
+    .page-title {
+      font-size:2.5rem; font-weight:700;
+      margin:2rem 0 .5rem;
+      text-align:center;
+    }
+
+    /* SIDEBAR */
+    .filters {
+      background: var(--blanco);
+      padding:1.5rem;
+      border-radius:var(--radius);
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom:2rem;
+    }
+    .filters h5 {
+      font-weight:600; margin-bottom:1rem;
+      color: var(--negro);
+    }
+    .filters .form-check-label {
+      margin-left:.5rem; font-weight:500;
+    }
+    .price-range {
+      margin-top:1rem;
+    }
+    .price-range input[type="range"] {
+      width:100%;
+    }
+    .price-values {
+      display:flex; justify-content:space-between;
+      font-size:.9rem; color:var(--gris-oscuro);
+    }
+
+    /* MAIN */
+    .sort-bar {
+      display:flex; justify-content:space-between;
+      align-items:center; margin-bottom:1.5rem;
+    }
+    .sort-bar select {
+      border-radius:var(--radius);
+      border:1px solid var(--gris-oscuro);
+      padding:.4rem .8rem;
+    }
+
+    .card-product {
+      background: var(--blanco);
+      border:none; border-radius:var(--radius);
+      box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      transition:transform var(--trans), box-shadow var(--trans);
+    }
+    .card-product:hover {
+      transform:translateY(-5px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+    }
+    .card-product .card-img-top {
+      height:180px; object-fit:contain; padding:1rem;
+    }
+    .card-product .card-body {
+      text-align:center;
+    }
+    .card-product .card-title {
+      font-size:1.1rem; font-weight:600;
+      margin-bottom:.5rem;
+    }
+    .card-product .price {
+      font-size:1.25rem; color:var(--naranja);
+      font-weight:700; margin-bottom:.8rem;
+    }
+    .card-product .btn {
+      border-radius:50px; font-weight:600;
+      padding:.5rem 1.2rem; transition:background var(--trans);
+    }
+    .btn-buy {
+      background:var(--naranja); color:var(--negro); border:none;
+    }
+    .btn-buy:hover { background:#db500f; }
+    .btn-cart {
+      background:transparent;
+      border:2px solid var(--naranja);
+      color:var(--naranja);
+    }
+    .btn-cart:hover {
+      background:var(--naranja); color:var(--negro);
+    }
+
+    /* FOOTER */
+    footer {
+      background:var(--negro); color:var(--gris-claro);
+      padding:2rem; margin-top:3rem;
+    }
+    footer h5 { font-weight:600; margin-bottom:.5rem;}
+    footer a { color:var(--naranja); transition:color var(--trans);}
+    footer a:hover { color:#fff;}
+
+    @media(max-width:992px){
+      .sort-bar { flex-direction:column; gap:1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
+          <li class="nav-item"><a class="nav-link" href="producto-categoria.html">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <form class="d-flex search-bar me-3">
+          <input class="form-control" type="search" placeholder="Buscar…">
+          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex">
+          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TÍTULO -->
+  <h1 class="page-title">Todos los Productos</h1>
+
+  <div class="container-fluid">
+    <div class="row gx-4">
+
+      <!-- SIDEBAR DE FILTROS -->
+      <aside class="col-lg-3">
+        <div class="filters">
+          <h5>Buscar</h5>
+          <input id="filtro-buscar" class="form-control mb-3" placeholder="Nombre...">
+
+          <h5>Marca</h5>
+          <div id="filtro-marcas"></div>
+
+          <h5 class="mt-4">Precio</h5>
+          <div class="price-range">
+            <div class="price-values">
+              <span id="precio-min">0</span><span id="precio-max">0</span>
+            </div>
+            <input type="range" id="rango-precio" min="0" max="0" value="0">
+          </div>
+        </div>
+      </aside>
+
+      <!-- LISTADO PRINCIPAL -->
+      <main class="col-lg-9">
+        <div class="sort-bar">
+          <span><strong id="total-resultados">0</strong> productos</span>
+          <select id="sort-select">
+            <option value="relevancia">Más relevantes</option>
+            <option value="precio-asc">Precio: bajo a alto</option>
+            <option value="precio-desc">Precio: alto a bajo</option>
+          </select>
+        </div>
+
+        <div class="row gx-3" id="productos-list"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row text-center text-md-start gy-4">
+        <div class="col-md-4">
+          <h5>Mundo Franchi</h5>
+          <p>Distribuidor oficial de herramientas profesionales en Argentina.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <p>📞 11 2233 4455<br>📧 info@mundofranchi.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <p><a href="#">Instagram</a> | <a href="#">Facebook</a> | <a href="#">WhatsApp</a></p>
+        </div>
+      </div>
+      <div class="text-center mt-4"><small>&copy; 2025 Mundo Franchi. Todos los derechos reservados.</small></div>
+    </div>
+  </footer>
+
+  <!-- Firebase + Firestore + Lógica -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Configuración Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+      authDomain: "casafranchi-ff656.firebaseapp.com",
+      projectId: "casafranchi-ff656",
+      storageBucket: "casafranchi-ff656.appspot.com",
+      messagingSenderId: "336476209274",
+      appId: "1:336476209274:web:fba9994666d0656817bc3"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Estado
+    let productos = [],  
+        filtros = { buscar:'', marcas:new Set(), precioMax:0 },
+        rangoPrecio;
+
+    // Referencias DOM
+    const $lista = document.getElementById('productos-list'),
+          $marcas = document.getElementById('filtro-marcas'),
+          $buscar = document.getElementById('filtro-buscar'),
+          $rango = document.getElementById('rango-precio'),
+          $min   = document.getElementById('precio-min'),
+          $max   = document.getElementById('precio-max'),
+          $total = document.getElementById('total-resultados'),
+          $sort  = document.getElementById('sort-select');
+
+    // Cargar y preparar
+    db.collection("productos").get().then(snap => {
+      snap.forEach(doc => {
+        const d = doc.data();
+        productos.push({
+          id: d.codigo,
+          titulo: d.producto,
+          marca: d.marca,
+          precio: d.csi_cem,
+          img: d.imagenes[0]?.base64
+        });
+      });
+      initFiltros();
+      render();
+    });
+
+    function initFiltros(){
+      // marcas
+      const marcas = [...new Set(productos.map(p=>p.marca))].sort();
+      marcas.forEach(m=>{
+        const id = 'm-'+m.replaceAll(' ','_');
+        $marcas.insertAdjacentHTML('beforeend',`
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${m}" id="${id}">
+            <label class="form-check-label" for="${id}">${m}</label>
+          </div>
+        `);
+        document.getElementById(id).addEventListener('change',e=>{
+          if(e.target.checked) filtros.marcas.add(m);
+          else filtros.marcas.delete(m);
+          render();
+        });
+      });
+      // precio
+      const precios = productos.map(p=>p.precio);
+      const max = Math.ceil(Math.max(...precios)/1000)*1000;
+      rangoPrecio = max;
+      $rango.max = max; $rango.value = max;
+      $min.textContent = '0'; $max.textContent = `$${max.toLocaleString()}`;
+      filtros.precioMax = max;
+      $rango.addEventListener('input',()=>{
+        filtros.precioMax = Number($rango.value);
+        $max.textContent = '$'+filtros.precioMax.toLocaleString();
+        render();
+      });
+      // buscar
+      $buscar.addEventListener('input',e=>{
+        filtros.buscar = e.target.value.trim().toLowerCase();
+        render();
+      });
+      // sort
+      $sort.addEventListener('change',render);
+    }
+
+    function render(){
+      // filtrar
+      let res = productos.filter(p=>{
+        return p.precio <= filtros.precioMax
+            && (!filtros.buscar || p.titulo.toLowerCase().includes(filtros.buscar))
+            && (filtros.marcas.size===0 || filtros.marcas.has(p.marca));
+      });
+      // ordenar
+      if($sort.value==='precio-asc') res.sort((a,b)=>a.precio-b.precio);
+      if($sort.value==='precio-desc') res.sort((a,b)=>b.precio-a.precio);
+      // mostrar total
+      $total.textContent = res.length;
+      // render cards
+      $lista.innerHTML = res.map(p=>`
+        <div class="col-sm-6 col-lg-4 mb-4">
+          <div class="card card-product h-100">
+            <img src="data:image/jpeg;base64,${p.img}" class="card-img-top" alt="${p.titulo}">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">${p.titulo}</h5>
+              <p class="price">$${Math.round(p.precio).toLocaleString()}</p>
+              <div class="mt-auto d-grid gap-2">
+                <button class="btn btn-buy" onclick="verDetalle('${p.id}')">Comprar ahora</button>
+                <button class="btn btn-cart" onclick="agregarCarrito('${p.id}')">Agregar al carrito</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function verDetalle(id){
+      const prod = productos.find(p=>p.id===id);
+      localStorage.setItem('detalleProducto', JSON.stringify(prod));
+      window.location.href='detalleproducto.html';
+    }
+    function agregarCarrito(id){
+      const prod = productos.find(p=>p.id===id);
+      const cart = JSON.parse(localStorage.getItem('carrito')||'[]');
+      cart.push(prod);
+      localStorage.setItem('carrito', JSON.stringify(cart));
+      alert('✅ Agregado al carrito');
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

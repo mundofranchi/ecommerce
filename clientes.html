@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Clientes | Mundo Franchi</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --font: 'Montserrat', sans-serif;
+    }
+    body {
+      font-family: var(--font);
+      background: var(--gris-claro);
+      height:100vh;
+      overflow:hidden;
+    }
+    #wrapper { display:flex; height:100%; }
+    #sidebar-wrapper {
+      width: 220px; background: var(--negro);
+    }
+    .sidebar-heading {
+      color: #fff; text-align:center;
+      padding:1.5rem; font-size:1.25rem;
+    }
+    .list-group-item {
+      background: var(--negro);
+      color: #fff;
+      border:none;
+    }
+    .list-group-item:hover {
+      background: #333;
+    }
+    #page-content-wrapper {
+      flex:1; overflow-y:auto;
+    }
+    .table thead {
+      background: var(--naranja); color:#fff;
+    }
+    .btn-naranja {
+      background: var(--naranja); color:#111;
+    }
+    .btn-naranja:hover {
+      background: darken(var(--naranja),5%);
+    }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <div class="sidebar-heading">Admin Panel</div>
+    <div class="list-group list-group-flush">
+      <a href="dashboard.html"  class="list-group-item">📊 Dashboard</a>
+      <a href="clientes.html"   class="list-group-item active">👥 Clientes</a>
+      <a href="pedidos.html"    class="list-group-item">🛒 Pedidos</a>
+      <a href="productos.html"  class="list-group-item">📦 Productos</a>
+      <a href="metricas.html"   class="list-group-item">📈 Métricas</a>
+      <a href="envios.html"     class="list-group-item">🚚 Envíos</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <!-- Topbar -->
+    <nav class="navbar navbar-light bg-white border-bottom">
+      <div class="container-fluid">
+        <h3 class="mb-0">Clientes</h3>
+      </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+      <!-- Botón nuevo cliente -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5>Listado de clientes</h5>
+        <button class="btn btn-naranja" data-bs-toggle="modal" data-bs-target="#clienteModal">
+          <i class="bi bi-plus-lg"></i> Agregar Cliente
+        </button>
+      </div>
+
+      <!-- Tabla de clientes -->
+      <div class="table-responsive">
+        <table class="table table-striped align-middle" id="clientesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Registro</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody><!-- se llena con JS --></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="clienteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="clienteForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Nuevo Cliente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="clienteId">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" id="clienteNombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" id="clienteApellido" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" id="clienteEmail" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="tel" id="clienteTelefono" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-naranja" id="saveBtn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Inicializar Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+    authDomain: "casafranchi-ff656.firebaseapp.com",
+    projectId: "casafranchi-ff656"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Referencias DOM
+  const tableBody  = document.querySelector('#clientesTable tbody');
+  const modalTitle = document.getElementById('modalTitle');
+  const form       = document.getElementById('clienteForm');
+  const saveBtn    = document.getElementById('saveBtn');
+  const clienteId  = document.getElementById('clienteId');
+  const nombreIn   = document.getElementById('clienteNombre');
+  const apellidoIn = document.getElementById('clienteApellido');
+  const emailIn    = document.getElementById('clienteEmail');
+  const telIn      = document.getElementById('clienteTelefono');
+  const clienteModal = new bootstrap.Modal(document.getElementById('clienteModal'));
+
+  // 1) Leer y mostrar clientes
+  async function loadClientes() {
+    tableBody.innerHTML = '';
+    const snapshot = await db.collection('clientes').orderBy('apellido').get();
+    snapshot.forEach(doc => {
+      const { nombre, apellido, email, telefono, createdAt } = doc.data();
+      const fecha = createdAt?.toDate().toLocaleString() || '';
+      tableBody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>${doc.id}</td>
+          <td>${nombre}</td>
+          <td>${apellido}</td>
+          <td>${email}</td>
+          <td>${telefono||''}</td>
+          <td>${fecha}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-primary me-1" onclick="editCliente('${doc.id}')">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCliente('${doc.id}')">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `);
+    });
+  }
+
+  // 2) Abrir modal para nuevo cliente
+  document.querySelector('.btn-naranja[data-bs-target="#clienteModal"]').addEventListener('click', ()=> {
+    modalTitle.textContent = 'Nuevo Cliente';
+    saveBtn.textContent   = 'Crear';
+    clienteId.value = '';
+    form.reset();
+  });
+
+  // 3) Guardar o actualizar cliente
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      nombre:   nombreIn.value.trim(),
+      apellido: apellidoIn.value.trim(),
+      email:    emailIn.value.trim(),
+      telefono: telIn.value.trim(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    try {
+      if (clienteId.value) {
+        // update
+        await db.collection('clientes').doc(clienteId.value).update(data);
+      } else {
+        // create
+        await db.collection('clientes').add(data);
+      }
+      clienteModal.hide();
+      loadClientes();
+    } catch(err) {
+      console.error(err);
+      alert('Error guardando cliente.');
+    }
+  });
+
+  // 4) Cargar datos en modal para editar
+  async function editCliente(id) {
+    const doc = await db.collection('clientes').doc(id).get();
+    const d = doc.data();
+    modalTitle.textContent = 'Editar Cliente';
+    saveBtn.textContent    = 'Actualizar';
+    clienteId.value  = doc.id;
+    nombreIn.value   = d.nombre;
+    apellidoIn.value = d.apellido;
+    emailIn.value    = d.email;
+    telIn.value      = d.telefono || '';
+    clienteModal.show();
+  }
+
+  // 5) Eliminar cliente
+  async function deleteCliente(id) {
+    if (!confirm('¿Eliminar este cliente?')) return;
+    try {
+      await db.collection('clientes').doc(id).delete();
+      loadClientes();
+    } catch(err) {
+      console.error(err);
+      alert('Error eliminando cliente.');
+    }
+  }
+
+  // Inicial
+  loadClientes();
+</script>
+</body>
+</html>

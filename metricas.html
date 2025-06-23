@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Métricas | Mundo Franchi</title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --font: 'Montserrat', sans-serif;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family: var(--font);
+      background: var(--gris-claro); height:100vh; overflow:hidden;
+    }
+    #wrapper { display:flex; height:100%; }
+    /* Sidebar */
+    #sidebar-wrapper {
+      width:220px; background: var(--negro);
+    }
+    .sidebar-heading {
+      color:#fff; text-align:center;
+      padding:1.5rem; font-size:1.25rem;
+    }
+    .list-group-item {
+      background: var(--negro); color:#fff; border:none;
+    }
+    .list-group-item:hover,
+    .list-group-item.active {
+      background: #333; color:#fff;
+    }
+    /* Page Content */
+    #page-content-wrapper {
+      flex:1; overflow-y:auto;
+    }
+    /* Topbar */
+    .navbar { padding:1rem 2rem; background:#fff; border-bottom:1px solid #ddd; }
+    /* KPI Cards */
+    .kpi-card {
+      background:#fff; border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      padding:1.5rem; text-align:center;
+    }
+    .kpi-card h2 { font-size:2rem; margin-bottom:.5rem; color:var(--naranja); }
+    .kpi-card small { color:#666; }
+    /* Charts */
+    .chart-container {
+      background:#fff; border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      padding:1.5rem; margin-bottom:2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <div class="sidebar-heading">Admin Panel</div>
+    <div class="list-group list-group-flush">
+      <a href="dashboard.html"  class="list-group-item">📊 Dashboard</a>
+      <a href="clientes.html"   class="list-group-item">👥 Clientes</a>
+      <a href="pedidos.html"    class="list-group-item">🛒 Pedidos</a>
+      <a href="productos.html"  class="list-group-item">📦 Productos</a>
+      <a href="metricas.html"   class="list-group-item active">📈 Métricas</a>
+      <a href="envios.html"     class="list-group-item">🚚 Envíos</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <!-- Topbar -->
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <h3 class="mb-0">Métricas de Negocio</h3>
+      </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+      <!-- KPIs -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="kpi-card">
+            <h2 id="kpiClientes">0</h2>
+            <small>Clientes registrados</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="kpi-card">
+            <h2 id="kpiPedidos">0</h2>
+            <small>Pedidos totales</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="kpi-card">
+            <h2 id="kpiProductos">0</h2>
+            <small>Productos en catálogo</small>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="kpi-card">
+            <h2 id="kpiIngreso">$0</h2>
+            <small>Ingresos totales</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <h5>Evolución de Pedidos (mes)</h5>
+            <canvas id="chartPedidosMes"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <h5>Métodos de Pago</h5>
+            <canvas id="chartMetodosPago"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // 1) Inicializar Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+    authDomain: "casafranchi-ff656.firebaseapp.com",
+    projectId: "casafranchi-ff656"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // 2) Referencias a DOM
+  const kpiClientes   = document.getElementById('kpiClientes');
+  const kpiPedidos    = document.getElementById('kpiPedidos');
+  const kpiProductos  = document.getElementById('kpiProductos');
+  const kpiIngreso    = document.getElementById('kpiIngreso');
+  let pedidosData     = [];
+  let metodosConteo   = {};
+
+  // 3) Cargar métricas
+  async function loadMetrics(){
+    // 3.1) Clientes
+    const snapC = await db.collection('clientes').get();
+    kpiClientes.textContent = snapC.size;
+
+    // 3.2) Productos
+    const snapP = await db.collection('productos').get();
+    kpiProductos.textContent = snapP.size;
+
+    // 3.3) Pedidos
+    const snapO = await db.collection('pedidos').orderBy('fecha').get();
+    kpiPedidos.textContent = snapO.size;
+
+    // Procesar datos de pedidos
+    let ingresoTotal = 0;
+    pedidosData = [];
+    metodosConteo = {};
+    snapO.forEach(doc=>{
+      const o = doc.data();
+      // calcular total línea
+      let lineTotal = 0;
+      (o.items||[]).forEach(it=>{
+        const precio = Math.round(it.csi_cem||it.costo||0);
+        const cantidad = it.cantidad||1;
+        lineTotal += precio*cantidad;
+      });
+      ingresoTotal += lineTotal;
+      // mes / año
+      const fecha = o.fecha && o.fecha.toDate();
+      const mesKey = fecha ? `${fecha.getFullYear()}-${(fecha.getMonth()+1).toString().padStart(2,'0')}` : 'unknown';
+      pedidosData.push({ mes: mesKey, total: lineTotal });
+      // conteo método pago
+      const m = o.metodoPago||'Otro';
+      metodosConteo[m] = (metodosConteo[m]||0) + 1;
+    });
+
+    kpiIngreso.textContent = '$'+ ingresoTotal.toLocaleString();
+
+    // 3.4) Renderizar gráficos
+    renderChartPedidos();
+    renderChartMetodos();
+  }
+
+  // 4) Gráfico: pedidos por mes
+  function renderChartPedidos(){
+    // agrupar por mes
+    const grupo = {};
+    pedidosData.forEach(o=>{
+      grupo[o.mes] = (grupo[o.mes]||0) + 1;
+    });
+    const labels = Object.keys(grupo).sort();
+    const valores= labels.map(l=>grupo[l]);
+
+    new Chart(document.getElementById('chartPedidosMes'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Pedidos',
+          data: valores,
+          borderColor: 'rgba(241,90,36,0.8)',
+          backgroundColor: 'rgba(241,90,36,0.2)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero:true }
+        }
+      }
+    });
+  }
+
+  // 5) Gráfico: métodos de pago
+  function renderChartMetodos(){
+    const labels = Object.keys(metodosConteo);
+    const valores= labels.map(l=>metodosConteo[l]);
+    const colores = labels.map((_,i)=>`hsl(${(i*60)%360},70%,60%)`);
+
+    new Chart(document.getElementById('chartMetodosPago'), {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{
+          data: valores,
+          backgroundColor: colores
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position:'bottom' }
+        }
+      }
+    });
+  }
+
+  // 6) Inicializar al cargar
+  document.addEventListener('DOMContentLoaded', loadMetrics);
+</script>
+</body>
+</html>

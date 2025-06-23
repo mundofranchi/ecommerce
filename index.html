@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Franchi - Tu Ferretería Online</title>
+  <!-- Bootstrap CSS y Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">Mundo Franchi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#beneficios">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="#marcas">Marcas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+        </ul>
+        <form class="d-flex search-bar me-3">
+          <input class="form-control" type="search" placeholder="Buscar productos...">
+          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex align-items-center">
+          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SLIDER -->
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active position-relative">
+        <img src="https://bynder.sbdinc.com/m/1848de21d7bbd413/Drupal_Large-BD_category-fallbackat3x_GEB1.jpg" class="d-block w-100 hero-carousel">
+        <div class="hero-caption">
+          <h1>Las Mejores Herramientas</h1>
+          <p>En Mundo Franchi encontrás calidad, precio y envío rápido.</p>
+          <a href="#productos" class="btn btn-primary">Ver Productos</a>
+        </div>
+      </div>
+      <div class="carousel-item position-relative">
+        <img src="https://res-de.togroup.com/stc/website-center/files/upload/common/source/HOME_PAGE_BANNER/8_wadfow/2.jpg"
+             class="d-block w-100 hero-carousel">
+        <div class="hero-caption">
+          <h1>Herramientas a Batería</h1>
+          <p>Libertad de movimiento y potencia sin cables.</p>
+          <a href="#productos" class="btn btn-primary">Descubrí</a>
+        </div>
+      </div>
+      <div class="carousel-item position-relative">
+        <img src="https://lacasadelcarpintero.com.ar/wp-content/uploads/2023/09/bosch_tools.jpg"
+             class="d-block w-100 hero-carousel">
+        <div class="hero-caption">
+          <h1>Potencia Industrial</h1>
+          <p>Las mejores marcas profesionales en un solo lugar.</p>
+          <a href="#marcas" class="btn btn-primary">Ver Marcas</a>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios">
+    <div class="container">
+      <div class="row gx-5 text-center">
+        <div class="col-md-4 mb-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="bi bi-credit-card icon"></i>
+            <div>
+              <h5>6 cuotas sin interés</h5>
+              <small>Con todas las tarjetas</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="bi bi-truck icon"></i>
+            <div>
+              <h5>Envíos gratis</h5>
+              <small>Compras mayores a $50.000</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="d-flex justify-content-center align-items-center">
+            <i class="bi bi-shield-check icon"></i>
+            <div>
+              <h5>Compra segura</h5>
+              <small>Protección total</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS (desde Firestore) -->
+  <section id="productos" class="container my-5">
+    <h2 class="section-title">Nuestros Productos</h2>
+    <div id="productosCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner" id="productos-carousel-inner"></div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#productosCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#productosCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </section>
+  
+  <!-- MARCAS -->
+<section id="marcas" class="bg-dark py-5">
+  <div class="container">
+    <h2 class="text-center text-white mb-4">Nuestras Marcas</h2>
+    <div
+      id="carouselMarcas"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="5000"
+      data-bs-pause="hover"
+    >
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <div class="row justify-content-center align-items-center gx-5">
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/DeWalt_Logo.svg/1200px-DeWalt_Logo.svg.png"
+                alt="DeWalt"
+                class="marca-logo"
+              >
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://www.underconsideration.com/brandnewawards/online/2013/wp-content/themes/twentyeleven_bnas/winners_images/149_01.png"
+                alt="Stanley"
+                class="marca-logo"
+              >
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Black%2BDecker_Logo.svg/2560px-Black%2BDecker_Logo.svg.png"
+                alt="Black & Decker"
+                class="marca-logo"
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <div class="row justify-content-center align-items-center gx-5">
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://images.seeklogo.com/logo-png/61/1/lusqtoff-logo-png_seeklogo-613214.png"
+                alt="Lusqtoff"
+                class="marca-logo"
+              >
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Bosch_logo.png"
+                alt="Bosch"
+                class="marca-logo"
+              >
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://smd.com.ar/wp-content/uploads/2021/03/bremen.jpg"
+                alt="Bremen"
+                class="marca-logo"
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+          <div class="row justify-content-center align-items-center gx-5">
+            <div class="col-6 col-md-4 col-lg-2 text-center">
+              <img
+                src="https://www.fixferreterias.com/media/home_brands/truper.png"
+                alt="Truper"
+                class="marca-logo"
+              >
+            </div>
+            <!-- opcionales para centrar -->
+            <div class="col-6 col-md-4 col-lg-2 empty-col"></div>
+            <div class="col-6 col-md-4 col-lg-2 empty-col"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles estándar -->
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselMarcas"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselMarcas"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+ <!-- CATEGORÍAS (manual, 3 por vista) -->
+<section id="categorias" class="bg-light py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Explorá nuestras <strong>categorías</strong></h2>
+    <div id="categoriasCarousel"
+         class="carousel slide position-relative"
+         data-bs-interval="false">
+      <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+          <div class="d-flex justify-content-center gap-4">
+            <div class="card categoria-card">
+              <img src="https://www.bosch-professional.com/ar/es/ocsmedia/41393-117/application-image/1434x828/rotomartillo-con-sds-plus-gbh-4-32-dfr-06113321h0.jpg"
+                   class="card-img-top" alt="Rotomartillo">
+              <div class="card-body"><strong>Rotomartillo</strong></div>
+            </div>
+            <div class="card categoria-card">
+              <img src="https://zummar.com/wp-content/uploads/2023/02/taladros-dewalt-blog.jpg"
+                   class="card-img-top" alt="Taladro">
+              <div class="card-body"><strong>Taladro</strong></div>
+            </div>
+            <div class="card categoria-card">
+              <img src="https://www.shope.com.ar/contenido/productos/original/1652369640.png"
+                   class="card-img-top" alt="Demoledor">
+              <div class="card-body"><strong>Demoledor</strong></div>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center gap-4">
+            <div class="card categoria-card">
+              <img src="https://www.perozzi.com.ar/41957-large_default/bosch-taladroatornillador-gsr-7-14e-400w.jpg"
+                   class="card-img-top" alt="Atornillador">
+              <div class="card-body"><strong>Atornillador</strong></div>
+            </div>
+            <div class="card categoria-card">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm8yghauEGV38_fA69OQnqnb8TAimT7VPqnQ&s"
+                   class="card-img-top" alt="Sierra Circular">
+              <div class="card-body"><strong>Sierra Circular</strong></div>
+            </div>
+            <div class="card categoria-card">
+              <img src="https://mla-s1-p.mlstatic.com/788441-MLA49837236869_052022-F.jpg"
+                   class="card-img-top" alt="Cortadora de Cerámica">
+              <div class="card-body"><strong>Cortadora de Cerámica</strong></div>
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item">
+          <div class="d-flex justify-content-center gap-4">
+            <div class="card categoria-card">
+              <img src="https://bergalloypastrone.vtexassets.com/arquivos/ids/156585/Amoladora-Angular-Black-Decker-820w-G720N-5.jpg"
+                   class="card-img-top" alt="Amoladora">
+              <div class="card-body"><strong>Amoladora</strong></div>
+            </div>
+            <div class="card categoria-card">
+              <img src="https://img.freepik.com/fotos-premium/diferentes-accesorios-construccion_185193-17576.jpg"
+                   class="card-img-top" alt="Accesorios">
+              <div class="card-body"><strong>Accesorios</strong></div>
+            </div>
+            <!-- placeholder para completar grupo de 3 -->
+            <div class="card categoria-card invisible"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <button class="carousel-control-prev" type="button"
+              data-bs-target="#categoriasCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button"
+              data-bs-target="#categoriasCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+
+ 
+
+  
+<!-- BANNER PROMO -->
+  <section class="promo-ferre">
+    <img src="https://cdn.prod.website-files.com/64ca37391046bd0e764dc522/651fc9d000dfb92f044f61e3_Dentr-ferreteria.jpg"
+         alt="Promo Mundo Franchi" class="w-100">
+    <div class="content">
+      <h2>Ferretería Online</h2>
+      <p class="lead">Recibí todo en casa, <strong>gratis</strong> y <strong>en cuotas sin interés</strong>.</p>
+      <a href="#productos" class="btn btn-warning">¡Comprá ahora!</a>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section class="container text-center my-5" id="nosotros">
+    <h2 class="section-title">Sobre Mundo Franchi</h2>
+    <p>Somos una tienda especializada en herramientas eléctricas y a batería. Brindamos calidad, garantía y entrega rápida en todo el país.</p>
+  </section>
+
+  <!-- ============================= -->
+<!-- SECCIÓN: PRODUCTOS MÁS VENDIDOS -->
+<!-- ============================= -->
+<section id="top-products" class="py-5 bg-light position-relative">
+  <div class="container">
+    <h2 class="text-center mb-4" style="font-size:2.5rem; font-weight:700;">
+      Productos <span style="color:var(--clr-primary);">más vendidos</span>
+    </h2>
+    <div class="top-products-wrapper position-relative">
+      <button class="tp-btn prev">&lt;</button>
+      <div class="top-products-list d-flex align-items-center">
+        <!-- Aquí inyectaremos los círculos desde Firestore -->
+      </div>
+      <button class="tp-btn next">&gt;</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* === CARRUSEL CIRCULAR (mantén las variables de tu CSS principal) === */
+  .top-products-wrapper { overflow: hidden; }
+  .top-products-list {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 3rem;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  .tp-btn {
+    position: absolute; top:50%; transform:translateY(-50%);
+    z-index:2; width:3rem; height:3rem; border:none;
+    border-radius:50%; background:var(--clr-primary); color:#fff;
+    font-size:1.5rem; cursor:pointer;
+    transition:background .3s;
+  }
+  .tp-btn:hover { background: #d04f1f; }
+  .prev { left:1rem; } .next { right:1rem; }
+
+  .product-circle {
+    flex:0 0 auto; width:180px; height:180px;
+    border-radius:50%; overflow:hidden; background:#fff;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    transition:transform .3s, box-shadow .3s;
+    position:relative; cursor:pointer;
+  }
+  .product-circle img {
+    width:100%; height:100%; object-fit:cover;
+  }
+  .product-circle:hover {
+    transform:scale(1.1);
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+  }
+  .product-circle .info {
+    position:absolute; bottom:0; width:100%;
+    background:rgba(0,0,0,0.6); color:#fff;
+    text-align:center; padding:.4rem .2rem;
+    font-size:.9rem; opacity:0;
+    transition:opacity .3s;
+  }
+  .product-circle:hover .info { opacity:1; }
+
+  @media (max-width:768px) {
+    .tp-btn { display:none; }
+    .top-products-list { overflow-x:auto; padding:0 1rem; }
+  }
+</style>
+
+<script>
+  // ================================
+  // Suponemos que ya inicializaste Firebase antes
+  // ================================
+  
+</script>
+
+
+  <!-- FOOTER -->
+  <footer id="contacto">
+    <div class="container text-center">
+      <div class="row gy-3">
+        <div class="col-md-4">
+          <h5>Mundo Franchi</h5>
+          <small>Distribuidor oficial de herramientas profesionales en Argentina.</small>
+        </div>
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <small>📞 11 2233 4455<br>📧 info@mundofranchi.com</small>
+        </div>
+        <div class="col-md-4">
+          <h5>Seguinos</h5>
+          <small><a href=\"#\">Instagram</a> | <a href=\"#\">Facebook</a> | <a href=\"#\">WhatsApp</a></small>
+        </div>
+      </div>
+      <small class="d-block mt-3">&copy; 2025 Mundo Franchi. Todos los derechos reservados.</small>
+    </div>
+  </footer>
+
+  <!-- Firebase + Firestore + Poblado de productos -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+      authDomain: "casafranchi-ff656.firebaseapp.com",
+      projectId: "casafranchi-ff656",
+      storageBucket: "casafranchi-ff656.appspot.com",
+      messagingSenderId: "336476209274",
+      appId: "1:336476209274:web:fba9994666d0656817bc3",
+      measurementId: "G-NZMERBW9EQ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    db.collection("productos").get().then(snapshot => {
+  // 1) Array para guardar todos los datos de cada producto
+  const productos = [];
+  // 2) Array de strings con el HTML de cada tarjeta
+  const cards = [];
+
+    const listEl = document.querySelector('#top-products .top-products-list');
+  const placeholder = 'https://via.placeholder.com/180';
+
+  firebase.firestore()
+    .collection("productos")
+    .limit(6)
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        // Ahora usamos imagen1_base64 directamente
+        const imgSrc = d.imagen1_base64
+          ? `data:image/jpeg;base64,${d.imagen1_base64}`
+          : placeholder;
+
+        const div = document.createElement('div');
+        div.className = 'product-circle';
+        div.innerHTML = `
+          <img src="${imgSrc}" alt="${d.producto}">
+          <div class="info">
+            <strong>${d.producto}</strong><br>
+            <span>$${Math.round(d.csi_cem).toLocaleString()}</span>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    })
+    .catch(err => console.error("Error cargando top products:", err));
+
+  document.querySelector('.prev').addEventListener('click', () => {
+    listEl.scrollBy({ left: -200, behavior: 'smooth' });
+  });
+  document.querySelector('.next').addEventListener('click', () => {
+    listEl.scrollBy({ left:  200, behavior: 'smooth' });
+  });
+  // Recorro los docs y construyo productos[] y cards[]
+  snapshot.forEach(doc => {
+    const d = { id: doc.id, ...doc.data() };
+    productos.push(d);
+    const idx = productos.length - 1;
+
+    cards.push(`
+      <div class="col-md-4">
+        <div class="card producto-card mb-4" data-index="${idx}">
+          <img 
+            src="data:image/jpeg;base64,${d.imagen1_base64}" 
+            class="card-img-top js-ver-detalle" 
+            alt="${d.producto}" 
+            style="cursor:pointer;"
+          >
+          <div class="card-body">
+            <h5 class="card-title">${d.producto}</h5>
+            <p class="card-text">${d.caracteristica||''}</p>
+            <div class="price">$${Math.round(d.csi_cem).toLocaleString()}</div>
+            <!-- Botones -->
+            <button class="btn btn-primary btn-comprar-ahora w-100 mt-3">
+              Comprar ahora
+            </button>
+            <button class="btn btn-outline-primary btn-agregar-carrito w-100 mt-2">
+              Agregar al carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
+  // Construyo los slides de a 3 tarjetas
+  const slides = [];
+  for (let i = 0; i < cards.length; i += 3) {
+    slides.push(`
+      <div class="carousel-item ${i === 0 ? 'active' : ''}">
+        <div class="row justify-content-center">
+          ${cards.slice(i, i + 3).join('')}
+        </div>
+      </div>
+    `);
+  }
+  document.getElementById("productos-carousel-inner").innerHTML = slides.join('');
+
+  // --- Ahora los event listeners ---
+
+  // 2) Hacer click en la imagen => ir a detalle
+  document.querySelectorAll('.js-ver-detalle').forEach(img => {
+    img.addEventListener('click', e => {
+      const idx = e.target.closest('.producto-card').dataset.index;
+      const producto = productos[idx];
+      localStorage.setItem('detalleProducto', JSON.stringify(producto));
+      window.location.href = 'detalleproducto.html';
+    });
+  });
+
+  // 3) Comprar ahora: guarda y va a detalle
+  document.querySelectorAll('.btn-comprar-ahora').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const idx = e.target.closest('.producto-card').dataset.index;
+      const producto = productos[idx];
+      localStorage.setItem('detalleProducto', JSON.stringify(producto));
+      window.location.href = 'detalleproducto.html';
+    });
+  });
+
+  // 4) Agregar al carrito: guarda en array en localStorage
+  document.querySelectorAll('.btn-agregar-carrito').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const idx = e.target.closest('.producto-card').dataset.index;
+      const producto = productos[idx];
+      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      carrito.push(producto);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      // opcional: notificar al usuario
+      alert(`"${producto.producto}" agregado al carrito.`);
+    });
+  });
+
+});
+
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- Botón flotante del carrito -->
+  <div id="carrito-flotante">
+    <i class="bi bi-cart3"></i>
+    <span id="contador-carrito">0</span>
+  </div>
+
+  <!-- Panel lateral del carrito -->
+  <div id="panel-carrito">
+    <div class="carrito-header">
+      <h5>🛒 Tu Carrito</h5>
+      <button id="cerrar-carrito" class="btn-close"></button>
+    </div>
+    <div id="contenido-carrito" class="carrito-items"></div>
+    <div class="carrito-total">
+      <strong>Total: $<span id="carrito-total">0</span></strong>
+    </div>
+  </div>
+  <style>
+    #carrito-flotante {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: orange;
+        color: black;
+        border-radius: 50px;
+        padding: 12px 16px;
+        cursor: pointer;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      #carrito-flotante span {
+        margin-left: 8px;
+        background: black;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 50px;
+        font-size: 14px;
+      }
+
+      #panel-carrito {
+        position: fixed;
+        top: 0;
+        right: -400px;
+        width: 400px;
+        height: 100%;
+        background: white;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+        transition: right 0.3s ease-in-out;
+        z-index: 10000;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #panel-carrito.open {
+        right: 0;
+      }
+
+      .carrito-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .carrito-items {
+        flex: 1;
+        overflow-y: auto;
+        margin-top: 20px;
+      }
+
+      .carrito-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 12px;
+        gap: 10px;
+      }
+
+      .carrito-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #ff6a00;
+      }
+
+      .carrito-detalle {
+        flex: 1;
+      }
+
+      .producto-nombre {
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .producto-precio {
+        font-size: 15px;
+        color: #ff6a00;
+      }
+
+      .btn-eliminar {
+        background: transparent;
+        border: none;
+        color: #ff6a00;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0 8px;
+        transition: color 0.2s ease;
+      }
+
+      .btn-eliminar:hover {
+        color: #cc5200;
+      }
+
+      .btn-finalizar-compra {
+        display: block;
+        margin-top: 25px;
+        background-color: #ff6a00;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s ease;
+      }
+
+      .btn-finalizar-compra:hover {
+        background-color: #e55d00;
+      }
+
+      .carrito-vacio {
+        text-align: center;
+        color: #666;
+        margin-top: 30px;
+        font-style: italic;
+      }
+  </style>
+  
+  <script>
+  function actualizarContadorCarrito() {
+    const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+    document.getElementById('contador-carrito').textContent = cart.length;
+  }
+
+  function actualizarContadorCarrito() {
+  const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+  document.getElementById('contador-carrito').textContent = cart.length;
+}
+
+function eliminarProducto(index) {
+  const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+  cart.splice(index, 1); // elimina por índice
+  localStorage.setItem('carrito', JSON.stringify(cart));
+  renderizarCarrito();
+  actualizarContadorCarrito();
+}
+
+function renderizarCarrito() {
+  const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+  const contenedor = document.getElementById('contenido-carrito');
+  const totalSpan = document.getElementById('carrito-total');
+  contenedor.innerHTML = '';
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    const precio = parseFloat(item.csi_cem || 0);
+    total += precio;
+
+    const imagenBase64 = item.imagen1_base64 || '';
+    const imagenSrc = imagenBase64.length > 100
+      ? `data:image/jpeg;base64,${imagenBase64}`
+      : 'https://via.placeholder.com/60x60.png?text=Sin+Imagen';
+
+    const div = document.createElement('div');
+    div.className = 'carrito-item';
+    div.innerHTML = `
+      <img src="${imagenSrc}" alt="Producto">
+      <div class="carrito-detalle">
+        <div class="producto-nombre">${item.producto}</div>
+        <div class="producto-precio">$${precio.toFixed(2)}</div>
+      </div>
+      <button class="btn-eliminar" onclick="eliminarProducto(${index})">✕</button>
+    `;
+    contenedor.appendChild(div);
+  });
+
+  totalSpan.textContent = total.toFixed(2);
+
+  if (cart.length > 0) {
+    const botonFinalizar = document.createElement('a');
+    botonFinalizar.href = 'finalizarcompra.html';
+    botonFinalizar.className = 'btn-finalizar-compra';
+    botonFinalizar.innerText = 'Finalizar compra 🛍️';
+    contenedor.appendChild(botonFinalizar);
+  } else {
+    contenedor.innerHTML = '<p class="carrito-vacio">🛒 Tu carrito está vacío</p>';
+  }
+}
+
+
+
+  document.getElementById('carrito-flotante').addEventListener('click', () => {
+    document.getElementById('panel-carrito').classList.add('open');
+    renderizarCarrito();
+  });
+
+  document.getElementById('cerrar-carrito').addEventListener('click', () => {
+    document.getElementById('panel-carrito').classList.remove('open');
+  });
+
+  actualizarContadorCarrito();
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
+</body>
+</html>

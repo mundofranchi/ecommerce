@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Franchi - Tienda Online</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { background: #ff6a00; color: white; padding: 1rem; text-align: center; }
+    nav { background: #333; color: white; display: flex; justify-content: space-around; padding: 0.5rem; }
+    nav a { color: white; text-decoration: none; }
+    .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 2rem; gap: 2rem; }
+    .product { border: 1px solid #ccc; padding: 1rem; width: 250px; text-align: center; }
+    .product img { width: 100%; height: auto; }
+    .btn { background: #ff6a00; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; margin-top: 1rem; }
+    .cart { position: fixed; top: 1rem; right: 1rem; background: white; border: 1px solid #ccc; padding: 1rem; width: 300px; display: none; }
+    .cart.active { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mundo Franchi</h1>
+    <p>Ferretería Industrial - Venta Online</p>
+  </header>
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#" onclick="toggleCart()">🛒 Ver Carrito (<span id="cart-count">0</span>)</a>
+  </nav>
+
+  <div class="container" id="product-list"></div>
+
+  <div class="cart" id="cart">
+    <h3>Carrito de Compras</h3>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="cart-total">0</span></p>
+    <button class="btn" onclick="checkout()">Finalizar Compra</button>
+  </div>
+
+  <script>
+    const productos = [
+      { id: 1, nombre: "Taladro INGCO P20S", precio: 356000, imagen: "https://via.placeholder.com/250x150" },
+      { id: 2, nombre: "Juego EMTOP 132 piezas", precio: 356000, imagen: "https://via.placeholder.com/250x150" },
+      { id: 3, nombre: "Soldadora Lusqtoff", precio: 285000, imagen: "https://via.placeholder.com/250x150" },
+    ];
+
+    const carrito = [];
+
+    function mostrarProductos() {
+      const lista = document.getElementById('product-list');
+      productos.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.imagen}" alt="${p.nombre}">
+          <h3>${p.nombre}</h3>
+          <p>$${p.precio}</p>
+          <button class="btn" onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
+        `;
+        lista.appendChild(div);
+      });
+    }
+
+    function agregarAlCarrito(id) {
+      const producto = productos.find(p => p.id === id);
+      carrito.push(producto);
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      const cartItems = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      const cartCount = document.getElementById('cart-count');
+      cartItems.innerHTML = '';
+      let total = 0;
+      carrito.forEach((item, i) => {
+        total += item.precio;
+        const li = document.createElement('li');
+        li.textContent = `${item.nombre} - $${item.precio}`;
+        cartItems.appendChild(li);
+      });
+      cartTotal.textContent = total;
+      cartCount.textContent = carrito.length;
+    }
+
+    function toggleCart() {
+      document.getElementById('cart').classList.toggle('active');
+    }
+
+    function checkout() {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+      alert("Gracias por tu compra! Nos contactaremos para coordinar el envío.");
+      carrito.length = 0;
+      actualizarCarrito();
+      toggleCart();
+    }
+
+    mostrarProductos();
+  </script>
+</body>
+</html>

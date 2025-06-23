@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datos & Pago | Mundo Franchi</title>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+   <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --gris-oscuro: #666;
+      --blanco:  #fff;
+      --font: 'Montserrat', sans-serif;
+      --radius: .5rem;
+      --trans: .3s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--gris-claro);
+      color: var(--negro);
+      line-height: 1.5;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { max-width:100%; display:block; }
+
+    /* NAVBAR */
+    nav.navbar {
+      background: var(--negro)!important;
+      padding:1rem 2rem;
+    }
+    .navbar-brand {
+      color: var(--naranja)!important;
+      font-weight:700; font-size:1.8rem;
+    }
+    .navbar-nav .nav-link {
+      color:#fff!important; margin-right:1rem;
+      transition: color var(--trans);
+    }
+    .navbar-nav .nav-link:hover {
+      color: var(--naranja)!important;
+    }
+    .search-bar input {
+      border-radius:50px 0 0 50px; border:none;
+      padding:.5rem 1rem; width:180px;
+    }
+    .search-bar button {
+      border-radius:0 50px 50px 0; border:none;
+      background:var(--naranja); color:var(--negro);
+      padding:.5rem 1rem;
+    }
+
+    /* STEPS INDICATOR */
+    .steps {
+      display:flex;
+      justify-content: space-between;
+      list-style:none;
+      padding:0; margin:2rem 0;
+    }
+    .steps li {
+      position: relative;
+      flex:1; text-align:center;
+      font-weight:500; color: var(--gris-oscuro);
+    }
+    .steps li::before {
+      content: attr(data-step);
+      display:inline-block;
+      background: var(--gris-claro);
+      color: var(--gris-oscuro);
+      width:32px; height:32px; line-height:32px;
+      border-radius:50%; margin-bottom:.5rem;
+      transition: background var(--trans), color var(--trans);
+    }
+    .steps li::after {
+      content:''; position:absolute; top:16px; left:50%;
+      width:100%; height:2px; background: var(--gris-claro); z-index:-1;
+    }
+    .steps li:first-child::after { left:50%; width:50%; }
+    .steps li:last-child::after { width:50%; }
+    .steps li.active { color: var(--naranja); }
+    .steps li.active::before { background: var(--naranja); color: var(--blanco); }
+    .steps li.active + li::after { background: var(--naranja); }
+
+    /* SECTIONS */
+    .d-none { display:none !important; }
+    .card-section {
+      background: var(--blanco);
+      border-radius: var(--radius);
+      box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      padding:2rem; margin-bottom:2rem;
+    }
+    .card-section h2 {
+      font-size:1.6rem; font-weight:700; margin-bottom:1rem;
+    }
+
+    /* FORM FIELDS */
+    .form-label { font-weight:500; color: var(--gris-oscuro); }
+    .form-control {
+      border-radius: var(--radius);
+      border:1px solid #ddd;
+      padding:.75rem 1rem;
+      transition: border-color var(--trans), box-shadow var(--trans);
+    }
+    .form-control:focus {
+      border-color: var(--naranja);
+      box-shadow: 0 0 0 3px rgba(241,90,36,0.2);
+    }
+
+    /* PAYMENT OPTIONS */
+    .payment-option {
+      border:1px solid #ddd; border-radius: var(--radius);
+      padding:1rem; margin-bottom:1rem;
+      transition: border-color var(--trans), background var(--trans);
+      cursor:pointer;
+    }
+    .payment-option input { margin-right:.75rem; }
+    .payment-option.selected {
+      border-color: var(--naranja);
+      background: rgba(241,90,36,0.05);
+    }
+
+    /* SUMMARY */
+    .summary-card {
+      background: var(--blanco);
+      border-radius: var(--radius);
+      box-shadow:0 4px 16px rgba(0,0,0,0.05);
+      padding:1.5rem; position: sticky; top:20px;
+    }
+    .summary-card h5 {
+      font-size:1.25rem; font-weight:600; margin-bottom:1rem;
+    }
+    .summary-list {
+      list-style:none; padding:0; margin:0 0 1rem;
+    }
+    .summary-list li {
+      display:flex; justify-content:space-between;
+      margin-bottom:.75rem; font-weight:500;
+    }
+    .summary-list li span:last-child { font-weight:700; }
+
+    /* BUTTONS */
+    .btn-next {
+      background: var(--naranja); color: var(--negro);
+      font-weight:600; padding: .75rem 1.5rem;
+      border:none; border-radius: var(--radius);
+      transition: background var(--trans), transform var(--trans);
+    }
+    .btn-next:hover {
+      background: #db500f; transform: translateY(-2px);
+    }
+    .btn-back {
+      background: transparent; border:1px solid #ccc;
+      color: var(--gris-oscuro); padding:.75rem 1.5rem;
+      border-radius: var(--radius);
+    }
+    .btn-back:hover { background:#f0f0f0; }
+
+    /* THANK YOU */
+    .thankyou { text-align:center; }
+    .thankyou h3 { font-size:2rem; margin-bottom:1rem; }
+    .thankyou p {
+      font-size:1rem; margin-bottom:1.5rem; color: var(--gris-oscuro);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--negro); color: var(--gris-claro);
+      padding:2rem; margin-top:2rem;
+    }
+    footer h5 { font-weight:600; margin-bottom:.5rem; }
+    footer a { color: var(--naranja); transition: color var(--trans); }
+    footer a:hover { color: #fff; }
+
+    @media(max-width:768px){
+      .search-bar input { width:120px; }
+      .steps { flex-direction: column; gap:1rem; }
+      .steps li::after { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
+          <li class="nav-item"><a class="nav-link" href="producto-categoria.html">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <form class="d-flex search-bar me-3">
+          <input class="form-control" type="search" placeholder="Buscar…">
+          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex">
+          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div id="mp-button-container" class="d-none"></div>
+  <!-- PROGRESS STEPS -->
+  <div class="container">
+    <ul class="steps">
+      <li data-step="1" class="active">Datos</li>
+      <li data-step="2">Pago</li>
+      <li data-step="3">Confirmación</li>
+    </ul>
+  </div>
+
+  <div class="container">
+    <div class="row gx-4">
+      <!-- IZQUIERDA: PASOS -->
+      <div class="col-lg-8">
+
+        <!-- STEP 1: DATOS -->
+        <section id="step-1">
+          <div class="card-section">
+            <h2>1. Tus datos</h2>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="nombre">Nombre</label>
+                <input class="form-control" type="text" id="nombre" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="apellido">Apellido</label>
+                <input class="form-control" type="text" id="apellido" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="dni">DNI</label>
+                <input class="form-control" type="text" id="dni" pattern="\d{7,9}" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" id="email" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="telefono">Teléfono</label>
+                <input class="form-control" type="tel" id="telefono" required>
+              </div>
+              <div class="col-12"><label class="form-label">Dirección</label></div>
+              <div class="col-md-8">
+                <input class="form-control" type="text" id="calle" placeholder="Calle y número" required>
+              </div>
+              <div class="col-md-4">
+                <input class="form-control" type="text" id="depto" placeholder="Piso / Depto">
+              </div>
+              <div class="col-md-6">
+                <input class="form-control" type="text" id="ciudad" placeholder="Ciudad" required>
+              </div>
+              <div class="col-md-6">
+                <input class="form-control" type="text" id="provincia" placeholder="Provincia" required>
+              </div>
+              <div class="col-md-4">
+                <input class="form-control" type="text" id="postal" placeholder="Código Postal" required>
+              </div>
+            </div>
+            <div class="mt-4 text-end">
+              <button class="btn-next" type="button" onclick="goToStep(2)">→ Siguiente: Pago</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2: PAGO -->
+        <section id="step-2" class="d-none">
+          <div class="card-section">
+            <h2>2. Método de Pago</h2>
+            <div class="payment-option" onclick="selectPay('tarjeta')" id="opt-tarjeta">
+              <input type="radio" name="metodo" value="Tarjeta de Crédito">
+              <strong>Tarjeta de Crédito</strong>
+            </div>
+            <div class="payment-option" onclick="selectPay('mercadopago')" id="opt-mercadopago">
+              <input type="radio" name="metodo" value="MercadoPago">
+              <strong>MercadoPago</strong>
+            </div>
+            <div class="payment-option" onclick="selectPay('transferencia')" id="opt-transferencia">
+              <input type="radio" name="metodo" value="Transferencia Bancaria">
+              <strong>Transferencia Bancaria</strong>
+            </div>
+            <div class="mt-4 d-flex justify-content-between">
+              <button class="btn-back" type="button" onclick="goToStep(1)">← Volver</button>
+              <button class="btn-next" type="button" onclick="submitPayment()">Confirmar pago →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3: CONFIRMACIÓN -->
+        <section id="step-3" class="d-none">
+          <div class="card-section thankyou">
+            <h3>¡Gracias por tu compra!</h3>
+            <p>Hemos recibido tu pedido y te enviaremos confirmación a tu correo.</p>
+            <ul class="summary-list" id="thankyouSummary"></ul>
+            <button class="btn-next mt-3" onclick="window.location='index.html'">← Volver al inicio</button>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- DERECHA: RESUMEN -->
+      <div class="col-lg-4">
+        <div class="summary-card">
+          <h5>Resumen de Compra</h5>
+          <ul class="summary-list" id="summaryData"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row text-center text-md-start gy-4">
+        <div class="col-md-4">
+          <h5>Mundo Franchi</h5>
+          <p>Distribuidor oficial de herramientas profesionales en Argentina.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <p>📞 11 2233 4455<br>📧 info@mundofranchi.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <p><a href="#">Instagram</a> | <a href="#">Facebook</a> | <a href="#">WhatsApp</a></p>
+        </div>
+      </div>
+      <div class="text-center mt-4"><small>© 2025 Mundo Franchi. Todos los derechos reservados.</small></div>
+    </div>
+  </footer>
+
+  
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Bootstrap Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ─────────── VARIABLES GLOBALES (usar var para que los onclick las vean) ───────────
+    var pagoSeleccionado = null;
+    var MP_PUBLIC_KEY = 'APP_USR-210f93a7-eb38-46e6-a682-8aa304fbeff7';
+    var mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' });
+
+    // ─────────── INICIALIZO FIREBASE ANTES DE firestore() ───────────
+    var firebaseConfig = {
+      apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+      authDomain: "casafranchi-ff656.firebaseapp.com",
+      projectId: "casafranchi-ff656",
+      storageBucket: "casafranchi-ff656.appspot.com",
+      messagingSenderId: "336476209274",
+      appId: "1:336476209274:web:fba9994666d0656817bc3",
+      measurementId: "G-NZMERBW9EQ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
+
+    // ─────────── FUNCIONES ───────────
+    function goToStep(n) {
+      document.querySelectorAll('section[id^="step-"]').forEach(s => s.classList.add('d-none'));
+      document.getElementById('step-'+n).classList.remove('d-none');
+      document.querySelectorAll('.steps li').forEach(li => li.classList.remove('active'));
+      document.querySelector('.steps li[data-step="'+n+'"]').classList.add('active');
+    }
+
+    function selectPay(id) {
+      ['tarjeta','mercadopago','transferencia'].forEach(x =>
+        document.getElementById('opt-'+x).classList.remove('selected')
+      );
+      document.getElementById('opt-'+id).classList.add('selected');
+      // ¡usamos var pagoSeleccionado de window!
+      pagoSeleccionado = document.querySelector('#opt-'+id+' input').value;
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      // CARGO RESUMEN de compra en la columna derecha
+      var cart = JSON.parse(localStorage.getItem('carrito')||'[]');
+      var $sum = document.getElementById('summaryData');
+      var total = 0;
+      if (!cart.length) {
+        $sum.innerHTML = '<li>No hay artículos.</li>';
+        return;
+      }
+      cart.forEach(function(p){
+        var price = Math.round(p.csi_cem||p.costo||0);
+        var qty   = p.cantidad||1;
+        total += price * qty;
+        var imgSrc = p.imagen1_base64
+          ? 'data:image/jpeg;base64,'+p.imagen1_base64
+          : (p.imagen||'');
+        $sum.insertAdjacentHTML('beforeend', `
+          <li class="d-flex align-items-center mb-2">
+            <img src="${imgSrc}" width="50" class="me-2 rounded" alt="${p.producto}"/>
+            <span>${p.producto}</span>
+            <span class="ms-auto">$${price.toLocaleString()}</span>
+          </li>
+        `);
+      });
+      $sum.insertAdjacentHTML('beforeend', `
+        <li class="d-flex justify-content-between mt-3">
+          <strong>Total</strong><strong>$${total.toLocaleString()}</strong>
+        </li>
+      `);
+    });
+
+    async function submitPayment(){
+      if (!pagoSeleccionado) {
+        return alert('Elegí un método de pago');
+      }
+
+      var cart = JSON.parse(localStorage.getItem('carrito')||'[]');
+      var info = JSON.parse(localStorage.getItem('infoCliente')||'{}');
+
+      if (pagoSeleccionado === 'MercadoPago') {
+        // ARMAR ITEMS y TOTAL para MP
+        if (!cart.length) return alert('Carrito vacío');
+        var items = cart.map(function(p){
+          return {
+            title: p.producto,
+            quantity: p.cantidad||1,
+            unit_price: Math.round(p.csi_cem||p.costo||0)
+          };
+        });
+        // 1) creo preferencia en mi backend
+        var resp = await fetch('http://localhost:3000/create_preference', {
+          method: 'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ items })
+        });
+        var { init_point } = await resp.json();
+        window.location.href = init_point;
+        return;
+      }
+
+      // Si elegí Tarjeta o Transferencia, guardo en Firestore
+      try {
+        var cliRef = await db.collection('clientes').add(info);
+        await db.collection('pedidos').add({
+          clienteId: cliRef.id,
+          fecha: firebase.firestore.FieldValue.serverTimestamp(),
+          metodoPago: pagoSeleccionado,
+          items: cart
+        });
+        goToStep(3);
+      } catch(e){
+        console.error(e);
+        alert('Error guardando tu pedido');
+      }
+    }
+
+    // ─────────── Asigno los onclick de las opciones al vuelo ───────────
+    document.getElementById('opt-tarjeta').onclick      = function(){ selectPay('tarjeta') };
+    document.getElementById('opt-mercadopago').onclick  = function(){ selectPay('mercadopago') };
+    document.getElementById('opt-transferencia').onclick= function(){ selectPay('transferencia') };
+    document.querySelector('.btn-next[onclick="submitPayment()"]').onclick = submitPayment;
+  </script>
+</body>
+</html>

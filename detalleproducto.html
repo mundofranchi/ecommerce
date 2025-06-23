@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detalle de Producto | Mundo Franchi</title>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Tipografía -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro: #111;
+      --gris-claro: #f4f4f4;
+      --gris-oscuro: #666;
+      --blanco: #fff;
+      --font-base: 'Montserrat', sans-serif;
+      --border-radius: .5rem;
+      --transition: .3s ease-in-out;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      font-family: var(--font-base);
+      background: var(--gris-claro);
+      color: var(--negro);
+      line-height:1.5;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { display:block; width:100%; }
+
+    /* NAVBAR */
+    nav.navbar {
+      background: var(--negro);
+      padding: .75rem 2rem;
+    }
+    .navbar-brand {
+      font-weight:700; font-size:1.8rem;
+      color: var(--naranja) !important;
+    }
+    .navbar-nav .nav-link {
+      color: var(--blanco) !important;
+      margin-right:1rem;
+      font-weight:500;
+      transition: color var(--transition);
+    }
+    .navbar-nav .nav-link:hover {
+      color: var(--naranja) !important;
+    }
+    .search-bar input {
+      border-radius:50px 0 0 50px;
+      border:none; width:200px; padding:.5rem 1rem;
+    }
+    .search-bar button {
+      border-radius:0 50px 50px 0;
+      border:none; background: var(--naranja);
+      color: var(--negro); padding:.5rem 1rem;
+    }
+
+    /* DETALLE PRODUCTO */
+    .detalle-container { padding:4rem 2rem; background: var(--blanco); border-radius: var(--border-radius); margin:2rem auto; max-width:1200px; }
+    .detalle-titulo { font-size:2.2rem; font-weight:700; margin-bottom:.5rem; }
+    .detalle-marca { color: var(--gris-oscuro); margin-bottom:1.5rem; font-style:italic; }
+    .detalle-precio {
+      font-size:2rem; font-weight:700;
+      color: var(--naranja); margin-bottom:1.5rem;
+    }
+    .detalle-carac { margin-bottom:2rem; color: var(--gris-oscuro); }
+
+    /* Carousel principal */
+    #carouselDetalle {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background: var(--gris-claro);
+    }
+    #carouselDetalle .carousel-item img {
+      height:400px; object-fit:contain;
+      background: var(--blanco);
+      transition: transform var(--transition);
+    }
+    #carouselDetalle .carousel-item.active img {
+      transform: scale(1.02);
+    }
+    /* Thumbnails */
+    .thumbs {
+      display:flex; justify-content:center;
+      gap:1rem; margin-top:1rem;
+    }
+    .thumbs img {
+      width: 80px; height:80px;
+      object-fit:cover;
+      border:2px solid transparent;
+      border-radius: var(--border-radius);
+      cursor:pointer;
+      transition: border var(--transition);
+    }
+    .thumbs img.active {
+      border-color: var(--naranja);
+    }
+
+    /* Botones */
+    .btn-compra {
+      background: var(--naranja);
+      color: var(--negro);
+      font-weight:600;
+      padding:.75rem;
+      border-radius: var(--border-radius);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .btn-compra:hover {
+      background: #db500f;
+      transform: translateY(-2px);
+    }
+    .btn-carrito {
+      border:2px solid var(--naranja);
+      color: var(--naranja);
+      font-weight:600;
+      padding:.75rem;
+      border-radius: var(--border-radius);
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-carrito:hover {
+      background: var(--naranja);
+      color: var(--negro);
+    }
+
+    /* Info extra */
+    .detalle-info li {
+      margin-bottom:.75rem;
+      display:flex; align-items:center;
+      color: var(--gris-oscuro);
+    }
+    .detalle-info li i {
+      font-size:1.25rem;
+      color: var(--naranja);
+      margin-right:.5rem;
+    }
+
+    /* Pestañas adicionales */
+    #detalle-tabs .nav-pills .nav-link {
+      border-radius: var(--border-radius);
+      margin:0 .5rem;
+      font-weight:600;
+      color: var(--gris-oscuro);
+      transition: background var(--transition), color var(--transition);
+    }
+    #detalle-tabs .nav-pills .nav-link.active {
+      background: var(--naranja);
+      color: var(--negro);
+    }
+    #detalle-tabs .tab-content {
+      background: var(--blanco);
+      padding:2rem;
+      border-radius: var(--border-radius);
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+      margin-top:1rem;
+    }
+    #detalle-tabs table th {
+      width:200px;
+      font-weight:600;
+      color: var(--gris-oscuro);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--negro);
+      color: var(--gris-claro);
+      padding:2rem;
+      margin-top:2rem;
+    }
+    footer h5 { font-weight:600; margin-bottom:.5rem; }
+    footer a { color: var(--naranja); transition: color var(--transition); }
+    footer a:hover { color: var(--blanco); }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#productos">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <form class="d-flex search-bar me-3">
+          <input class="form-control" type="search" placeholder="Buscar productos...">
+          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="d-flex">
+          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- DETALLE PRODUCTO -->
+  <section class="detalle-container container">
+    <div class="row gx-5">
+      <!-- Imágenes -->
+      <div class="col-lg-7">
+        <div id="carouselDetalle" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner" id="carousel-detalle-inner"></div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselDetalle" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselDetalle" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+        </div>
+        <div class="thumbs" id="detalle-thumbs"></div>
+      </div>
+
+      <!-- Información básica -->
+      <div class="col-lg-5">
+        <h1 class="detalle-titulo" id="detalle-titulo"></h1>
+        <div class="detalle-marca" id="detalle-marca"></div>
+        <div class="detalle-precio" id="detalle-precio"></div>
+        <p class="detalle-carac" id="detalle-caracteristica"></p>
+
+        <div class="d-grid gap-2 mb-4">
+          <button id="btn-comprar" class="btn-compra">Comprar ahora</button>
+          <button id="btn-carrito" class="btn-carrito">Agregar al carrito</button>
+        </div>
+
+        <ul class="detalle-info list-unstyled">
+          <li><i class="bi bi-credit-card-fill"></i> 6 cuotas sin interés</li>
+          <li><i class="bi bi-truck"></i> Envíos gratis a todo el país</li>
+          <li><i class="bi bi-shield-check"></i> Garantía oficial de hasta 36 meses</li>
+          <li><i class="bi bi-headset"></i> Soporte 24/7</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PESTAÑAS ADICIONALES -->
+    <div id="detalle-tabs" class="mt-5">
+      <ul class="nav nav-pills justify-content-center" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-desc-tab" data-bs-toggle="pill"
+                  data-bs-target="#pills-desc" type="button" role="tab">Descripción</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-benef-tab" data-bs-toggle="pill"
+                  data-bs-target="#pills-benef" type="button" role="tab">Beneficios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-about-tab" data-bs-toggle="pill"
+                  data-bs-target="#pills-about" type="button" role="tab">Sobre Nosotros</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <!-- Descripción -->
+        <div class="tab-pane fade show active" id="pills-desc" role="tabpanel">
+          <p id="detalle-descripcion" class="text-justify"></p>
+        </div>
+        <!-- Especificaciones -->
+        <div class="tab-pane fade" id="pills-especs" role="tabpanel">
+          <table class="table table-striped">
+            <tbody>
+              <tr><th>Código</th><td id="spec-codigo"></td></tr>
+              <tr><th>Costo</th><td id="spec-costo"></td></tr>
+              <tr><th>Ganancia</th><td id="spec-ganancia"></td></tr>
+              <tr><th>6 CSI + csi_cem</th><td id="spec-csi"></td></tr>
+              <tr><th>csi_cem</th><td id="spec-csi_cem"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Beneficios -->
+        <div class="tab-pane fade" id="pills-benef" role="tabpanel">
+          <ul class="list-unstyled">
+            <li><i class="bi bi-check-circle-fill text-primary me-2"></i>6 cuotas sin interés</li>
+            <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Envíos gratis a todo el país</li>
+            <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Garantía oficial de hasta 36 meses</li>
+            <li><i class="bi bi-check-circle-fill text-primary me-2"></i>Atención personalizada 24/7</li>
+          </ul>
+        </div>
+        <!-- Sobre Nosotros -->
+        <div class="tab-pane fade" id="pills-about" role="tabpanel">
+          <h3>Quiénes Somos</h3>
+          <p>Mundo Franchi es la ferretería online líder en Argentina, con más de 20 años dedicados a ofrecer herramientas profesionales de las mejores marcas.</p>
+          <p>Nuestra misión: llevar calidad y confianza a tu proyecto, con envío rápido y atención 24/7.</p>
+          <p>Visita nuestras redes para enterarte de las últimas promos y contenido exclusivo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row gy-4 text-center text-md-start">
+        <div class="col-md-4">
+          <h5>Mundo Franchi</h5>
+          <p>Distribuidor oficial de herramientas profesionales en Argentina.</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Contacto</h5>
+          <p>📞 11 2233 4455<br>📧 info@mundofranchi.com</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Síguenos</h5>
+          <p><a href="#">Instagram</a> | <a href="#">Facebook</a> | <a href="#">WhatsApp</a></p>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <small>&copy; 2025 Mundo Franchi. Todos los derechos reservados.</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Carga datos desde localStorage
+    const detalle = JSON.parse(localStorage.getItem('detalleProducto') || '{}');
+    if (!detalle.id) {
+      document.body.innerHTML = '<p class="text-center mt-5">Producto no encontrado.</p>';
+      throw '';
+    }
+
+    // Rellenar datos básicos
+    document.getElementById('detalle-titulo').textContent = detalle.producto;
+    document.getElementById('detalle-marca').textContent = detalle.marca;
+    document.getElementById('detalle-precio').textContent = '$' + Math.round(detalle.csi_cem).toLocaleString();
+    document.getElementById('detalle-caracteristica').textContent = detalle.caracteristica || '';
+    document.getElementById('detalle-descripcion').textContent = detalle.descripcion || detalle.caracteristica || 'Sin descripción disponible.';
+
+    // Generar carousel y thumbnails
+    const imgs = ['imagen1_base64','imagen2_base64','imagen3_base64']
+                  .map(k => detalle[k])
+                  .filter(Boolean);
+    const carouselInner = document.getElementById('carousel-detalle-inner');
+    const thumbsContainer = document.getElementById('detalle-thumbs');
+    imgs.forEach((b64, idx) => {
+      // Carousel item
+      const item = document.createElement('div');
+      item.className = 'carousel-item' + (idx===0? ' active':'');
+      item.innerHTML = `<img src="data:image/jpeg;base64,${b64}" alt="Imagen ${idx+1}">`;
+      carouselInner.appendChild(item);
+      // Thumbnail
+      const thumb = document.createElement('img');
+      thumb.src = `data:image/jpeg;base64,${b64}`;
+      if (idx===0) thumb.classList.add('active');
+      thumb.addEventListener('click',()=>{
+        bootstrap.Carousel.getInstance(document.getElementById('carouselDetalle')).to(idx);
+        document.querySelectorAll('.thumbs img').forEach(i=>i.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+      thumbsContainer.appendChild(thumb);
+    });
+
+    // Poner especificaciones en la tabla
+    document.getElementById('spec-codigo').textContent = detalle.codigo;
+    document.getElementById('spec-costo').textContent = '$' + Math.round(detalle.costo).toLocaleString();
+    document.getElementById('spec-ganancia').textContent = '$' + Math.round(detalle.c_ganancia).toLocaleString();
+    document.getElementById('spec-csi').textContent = detalle.csi_csi_cem;
+    document.getElementById('spec-csi_cem').textContent = detalle.csi_cem;
+
+    // Botones
+    document.getElementById('btn-carrito').addEventListener('click',()=>{
+      const cart = JSON.parse(localStorage.getItem('carrito')||'[]');
+      cart.push(detalle);
+      localStorage.setItem('carrito', JSON.stringify(cart));
+      alert('✅ Agregado al carrito');
+    });
+    document.getElementById('btn-comprar').addEventListener('click', () => {
+      // Agrega el producto al carrito
+      const cart = JSON.parse(localStorage.getItem('carrito') || '[]');
+      cart.push(detalle);
+      localStorage.setItem('carrito', JSON.stringify(cart));
+
+      // También lo marca como compra inmediata (opcional, si querés distinguirlo en checkout)
+      localStorage.setItem('compraInmediata', JSON.stringify(detalle));
+
+      // Redirecciona a checkout
+      window.location.href = 'finalizarcompra.html';
+    });
+  </script>
+</body>
+</html>

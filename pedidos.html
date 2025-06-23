@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin • Pedidos | Mundo Franchi</title>
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #f15a24;
+      --negro:   #111;
+      --gris-claro: #f4f4f4;
+      --font: 'Montserrat', sans-serif;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family: var(--font);
+      background: var(--gris-claro); height:100vh; overflow:hidden;
+    }
+    #wrapper { display:flex; height:100%; }
+    /* Sidebar */
+    #sidebar-wrapper {
+      width:220px; background: var(--negro);
+    }
+    .sidebar-heading {
+      color:#fff; text-align:center;
+      padding:1.5rem; font-size:1.25rem;
+    }
+    .list-group-item {
+      background: var(--negro); color:#fff; border:none;
+    }
+    .list-group-item:hover, .list-group-item.active {
+      background: #333; color:#fff;
+    }
+    /* Page Content */
+    #page-content-wrapper {
+      flex:1; overflow-y:auto;
+    }
+    /* Topbar */
+    .navbar { padding:1rem 2rem; background:#fff; border-bottom:1px solid #ddd; }
+    /* Table */
+    .table thead { background: var(--naranja); color:#fff; }
+    .btn-naranja { background: var(--naranja); color:#111; }
+    .btn-naranja:hover { background: #db500f; }
+    /* Modals */
+    .modal-header { background: var(--naranja); color:#fff; }
+    .modal-title { margin:0; }
+  </style>
+</head>
+<body>
+
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper">
+    <div class="sidebar-heading">Admin Panel</div>
+    <div class="list-group list-group-flush">
+      <a href="dashboard.html"  class="list-group-item">📊 Dashboard</a>
+      <a href="clientes.html"   class="list-group-item">👥 Clientes</a>
+      <a href="pedidos.html"    class="list-group-item active">🛒 Pedidos</a>
+      <a href="productos.html"  class="list-group-item">📦 Productos</a>
+      <a href="metricas.html"   class="list-group-item">📈 Métricas</a>
+      <a href="envios.html"     class="list-group-item">🚚 Envíos</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <!-- Topbar -->
+    <nav class="navbar navbar-light">
+      <div class="container-fluid">
+        <h3 class="mb-0">Pedidos</h3>
+      </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+      <!-- Tabla de Pedidos -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle" id="pedidosTable">
+          <thead>
+            <tr>
+              <th>ID Pedido</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Método</th>
+              <th># Items</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody><!-- JS llenará aquí --></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Detalle de Pedido -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detalle de Pedido</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>ID:</strong> <span id="detId"></span></p>
+        <p><strong>Cliente:</strong> <span id="detCliente"></span></p>
+        <p><strong>Fecha:</strong> <span id="detFecha"></span></p>
+        <p><strong>Método Pago:</strong> <span id="detPago"></span></p>
+        <hr>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr><th>Producto</th><th>Cantidad</th><th>Precio Unit.</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody id="detItems"></tbody>
+            <tfoot>
+              <tr>
+                <th colspan="3" class="text-end">Total:</th>
+                <th id="detTotal"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Cambiar Estado -->
+<div class="modal fade" id="statusModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar Estado</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="statusPedidoId">
+        <div class="mb-3">
+          <label class="form-label">Estado</label>
+          <select id="statusSelect" class="form-select">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Procesando">Procesando</option>
+            <option value="Enviado">Enviado</option>
+            <option value="Entregado">Entregado</option>
+            <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-naranja" id="saveStatusBtn">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // 1) Init Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+    authDomain: "casafranchi-ff656.firebaseapp.com",
+    projectId: "casafranchi-ff656"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // 2) Referencias DOM
+  const pedidosTbody = document.querySelector('#pedidosTable tbody');
+  const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+  const statusModal  = new bootstrap.Modal(document.getElementById('statusModal'));
+  const detId        = document.getElementById('detId');
+  const detCliente   = document.getElementById('detCliente');
+  const detFecha     = document.getElementById('detFecha');
+  const detPago      = document.getElementById('detPago');
+  const detItems     = document.getElementById('detItems');
+  const detTotal     = document.getElementById('detTotal');
+  const statusPedidoId = document.getElementById('statusPedidoId');
+  const statusSelect   = document.getElementById('statusSelect');
+  const saveStatusBtn  = document.getElementById('saveStatusBtn');
+
+  let clientesMap = {};
+  let pedidosData = [];
+
+  // 3) Cargar clientes en un map
+  async function loadClientesMap(){
+    const snap = await db.collection('clientes').get();
+    snap.forEach(doc => {
+      const d = doc.data();
+      clientesMap[doc.id] = `${d.nombre} ${d.apellido}`;
+    });
+  }
+
+  // 4) Cargar y mostrar pedidos
+  async function loadPedidos(){
+    await loadClientesMap();
+    pedidosTbody.innerHTML = '';
+    const snap = await db.collection('pedidos')
+                         .orderBy('fecha','desc')
+                         .get();
+    pedidosData = [];
+    snap.forEach(doc => {
+      const d = doc.data();
+      pedidosData.push({ id: doc.id, ...d });
+      // calcular items y total
+      const items = d.items || [];
+      let total = 0;
+      items.forEach(p=>{
+        const precio = Math.round(p.csi_cem||p.costo||0);
+        const qty = p.cantidad||1;
+        total += precio*qty;
+      });
+      const fecha = d.fecha?.toDate().toLocaleString()||'';
+      pedidosTbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>${doc.id}</td>
+          <td>${fecha}</td>
+          <td>${clientesMap[d.clienteId]||d.clienteId}</td>
+          <td>${d.metodoPago||''}</td>
+          <td>${items.length}</td>
+          <td>$${total.toLocaleString()}</td>
+          <td>${d.status||'Pendiente'}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-info me-1" onclick="verDetalle('${doc.id}')">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-warning" onclick="openStatusModal('${doc.id}')">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          </td>
+        </tr>
+      `);
+    });
+  }
+
+  // 5) Ver detalle
+  function verDetalle(id){
+    const pedido = pedidosData.find(p=>p.id===id);
+    detId.textContent = id;
+    detCliente.textContent = clientesMap[pedido.clienteId]||pedido.clienteId;
+    detFecha.textContent  = pedido.fecha?.toDate().toLocaleString()||'';
+    detPago.textContent   = pedido.metodoPago||'';
+    detItems.innerHTML    = '';
+    let total = 0;
+    (pedido.items||[]).forEach(p=>{
+      const precio = Math.round(p.csi_cem||p.costo||0);
+      const qty = p.cantidad||1;
+      const sub = precio*qty; total+=sub;
+      detItems.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>${p.producto}</td>
+          <td>${qty}</td>
+          <td>$${precio.toLocaleString()}</td>
+          <td>$${sub.toLocaleString()}</td>
+        </tr>
+      `);
+    });
+    detTotal.textContent = `$${total.toLocaleString()}`;
+    detailsModal.show();
+  }
+
+  // 6) Abrir modal de estado
+  function openStatusModal(id){
+    statusPedidoId.value = id;
+    const pedido = pedidosData.find(p=>p.id===id);
+    statusSelect.value = pedido.status||'Pendiente';
+    statusModal.show();
+  }
+
+  // 7) Guardar nuevo estado
+  saveStatusBtn.addEventListener('click', async ()=>{
+    const id = statusPedidoId.value;
+    const nuevo = statusSelect.value;
+    try {
+      await db.collection('pedidos').doc(id).update({ status: nuevo });
+      statusModal.hide();
+      loadPedidos();
+    } catch(e){
+      console.error(e);
+      alert('Error actualizando estado');
+    }
+  });
+
+  // Init
+  loadPedidos();
+</script>
+</body>
+</html>
