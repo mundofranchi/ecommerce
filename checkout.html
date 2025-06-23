@@ -435,7 +435,7 @@
           };
         });
         // 1) creo preferencia en mi backend
-        var resp = await fetch('http://localhost:3000/create_preference', {
+        var resp = await fetch('https://mundofranchi.onrender.com/create_preference', {
           method: 'POST',
           headers:{ 'Content-Type':'application/json' },
           body: JSON.stringify({ items })

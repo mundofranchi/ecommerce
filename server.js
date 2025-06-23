@@ -6,7 +6,9 @@ const path = require('path');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://mundofranchi.onrender.com'
+}));
 app.use(express.json());
 
 // ✅ Servir archivos estáticos (HTML, CSS, JS)
