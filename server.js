@@ -1,11 +1,15 @@
 // server.js
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { MercadoPagoConfig, Preference } = require('mercadopago');
 
 const app = express();
+console.log('🔐 MP_ACCESS_TOKEN desde entorno:', process.env.MP_ACCESS_TOKEN?.slice(0, 25) + '...');
 app.use(cors({
   origin: 'https://mundofranchi.onrender.com'
 }));
