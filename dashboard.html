@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --naranja: #f15a24;
+      --naranja: #ffe600;
       --negro:   #111;
       --gris-claro: #f4f4f4;
       --font: 'Montserrat', sans-serif;
@@ -197,7 +197,7 @@
       });
       new Chart(elC('estadoChart'), {
         type: 'pie',
-        data: { labels: Object.keys(estados), datasets:[{ data: Object.values(estados), backgroundColor: ['#f15a24','#ffa480','#cccccc','#888888'] }] }
+        data: { labels: Object.keys(estados), datasets:[{ data: Object.values(estados), backgroundColor: ['#ffe600','#ffa480','#cccccc','#888888'] }] }
       });
     });
   </script>

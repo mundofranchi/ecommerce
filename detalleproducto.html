@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --naranja: #f15a24;
+      --naranja: #ffe600;
       --negro: #111;
       --gris-claro: #f4f4f4;
       --gris-oscuro: #666;
@@ -30,33 +30,23 @@
     a { text-decoration:none; color:inherit; }
     img { display:block; width:100%; }
 
-    /* NAVBAR */
-    nav.navbar {
-      background: var(--negro);
-      padding: .75rem 2rem;
+    /* NAVBAR NUEVO TIPO MERCADO LIBRE */
+    .navbar {
+      padding: 0.75rem 1rem;
+      font-family: 'Montserrat', sans-serif;
+      z-index: 1000;
     }
-    .navbar-brand {
-      font-weight:700; font-size:1.8rem;
-      color: var(--naranja) !important;
+    .navbar input.form-control {
+      height: 45px;
+      font-size: 0.95rem;
     }
-    .navbar-nav .nav-link {
-      color: var(--blanco) !important;
-      margin-right:1rem;
-      font-weight:500;
-      transition: color var(--transition);
+    .navbar .btn-light {
+      height: 45px;
     }
-    .navbar-nav .nav-link:hover {
-      color: var(--naranja) !important;
+    .navbar .bi {
+      vertical-align: middle;
     }
-    .search-bar input {
-      border-radius:50px 0 0 50px;
-      border:none; width:200px; padding:.5rem 1rem;
-    }
-    .search-bar button {
-      border-radius:0 50px 50px 0;
-      border:none; background: var(--naranja);
-      color: var(--negro); padding:.5rem 1rem;
-    }
+
 
     /* DETALLE PRODUCTO */
     .detalle-container { padding:4rem 2rem; background: var(--blanco); border-radius: var(--border-radius); margin:2rem auto; max-width:1200px; }
@@ -177,28 +167,22 @@
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#productos">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
-        </ul>
-        <form class="d-flex search-bar me-3">
-          <input class="form-control" type="search" placeholder="Buscar productos...">
-          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
-        </form>
-        <div class="d-flex">
-          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
-          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
-        </div>
+  <!-- NAVBAR ESTILO MERCADO LIBRE -->
+  <nav class="navbar navbar-expand-lg shadow-sm" style="background-color: #ffe600;">
+    <div class="container align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="/index.html">
+        <img src="./logo4.png" alt="Logo" style="height: 75px;">
+      </a>
+      <form class="d-flex flex-grow-1 mx-3 position-relative">
+        <input id="searchInput" class="form-control rounded-start border-0 shadow-sm" type="search" placeholder="Buscar productos, marcas y más..." aria-label="Search" autocomplete="off">
+        <button class="btn btn-light border-start-0 rounded-end" type="submit"><i class="bi bi-search"></i></button>
+        <div id="searchResults" class="position-absolute bg-white shadow rounded mt-1 w-100 z-3 d-none" style="top: 100%; max-height: 300px; overflow-y: auto;"></div>
+      </form>
+
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="text-dark fw-semibold text-decoration-none">Categorías</a>
+        <a href="#" class="text-dark"><i class="bi bi-person fs-5"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-cart fs-5"></i></a>
       </div>
     </div>
   </nav>
@@ -330,7 +314,32 @@
     // Rellenar datos básicos
     document.getElementById('detalle-titulo').textContent = detalle.producto;
     document.getElementById('detalle-marca').textContent = detalle.marca;
-    document.getElementById('detalle-precio').textContent = '$' + Math.round(detalle.csi_cem).toLocaleString();
+    const precioLista = Math.round(detalle.csi_cem);
+    const precioTransferencia = Math.round(detalle.cem);
+    const cuota6 = Math.round(precioLista / 6);
+
+    document.getElementById('detalle-precio').innerHTML = `
+      <div style="font-size:2rem; font-weight:700; color:#d62828; margin-bottom:.5rem;">
+        $${precioLista.toLocaleString()}
+      </div>
+
+      <div style="color:#111; font-size:1.1rem; font-weight:600; margin-bottom:.5rem;">
+        6 cuotas sin interés de 
+        <span style="color:#d62828;">$${cuota6.toLocaleString()}</span>
+      </div>
+
+      <div style="font-size:1.1rem; font-weight:700; color:#1b5e20; margin-top:1.5rem;">
+        PRECIO TRANSFERENCIA / EFECTIVO
+      </div>
+      <div style="font-size:1.6rem; font-weight:700; color:#1b5e20;">
+        $${precioTransferencia.toLocaleString()}
+      </div>
+
+      <div style="font-size:.9rem; color:#555;">
+        Descuento pagando en efectivo / transferencia: <strong>41%</strong>
+      </div>
+    `;
+
     document.getElementById('detalle-caracteristica').textContent = detalle.caracteristica || '';
     document.getElementById('detalle-descripcion').textContent = detalle.descripcion || detalle.caracteristica || 'Sin descripción disponible.';
 

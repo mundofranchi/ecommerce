@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --naranja: #f15a24;
+      --naranja: #ffe600;
       --negro:   #111;
       --gris-claro: #f4f4f4;
       --gris-oscuro: #666;
@@ -31,30 +31,24 @@
     img { display:block; width:100%; }
 
     /* NAVBAR */
-    nav.navbar {
-      background: var(--negro)!important;
-      padding:1rem 2rem;
-    }
-    .navbar-brand {
-      font-weight:700; font-size:1.8rem;
-      color: var(--naranja)!important;
-    }
-    .navbar-nav .nav-link {
-      color:#fff!important; margin-right:1rem;
-      transition:color var(--trans);
-    }
-    .navbar-nav .nav-link:hover {
-      color: var(--naranja)!important;
-    }
-    .search-bar input {
-      border-radius:50px 0 0 50px;
-      border:none; padding:.5rem 1rem; width:200px;
-    }
-    .search-bar button {
-      border-radius:0 50px 50px 0;
-      border:none; background:var(--naranja);
-      color:var(--negro); padding:.5rem 1rem;
-    }
+    /* NAVBAR NUEVO TIPO MERCADO LIBRE */
+.navbar {
+  padding: 0.75rem 1rem;
+  font-family: 'Montserrat', sans-serif;
+  z-index: 1000;
+}
+.navbar input.form-control {
+  height: 45px;
+  font-size: 0.95rem;
+}
+.navbar .btn-light {
+  height: 45px;
+}
+.navbar .bi {
+  vertical-align: middle;
+}
+
+
 
     /* LAYOUT */
     .container-fluid { max-width:1400px; }
@@ -159,28 +153,22 @@
 <body>
 
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="index.html">Mundo Franchi</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html#beneficios">Beneficios</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#categorias">Categorías</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#marcas">Marcas</a></li>
-          <li class="nav-item"><a class="nav-link" href="producto-categoria.html">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contacto">Contacto</a></li>
-        </ul>
-        <form class="d-flex search-bar me-3">
-          <input class="form-control" type="search" placeholder="Buscar…">
-          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
-        </form>
-        <div class="d-flex">
-          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
-          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
-        </div>
+  <!-- NAVBAR ESTILO MERCADO LIBRE -->
+  <nav class="navbar navbar-expand-lg shadow-sm" style="background-color: #ffe600;">
+    <div class="container align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="/index.html">
+        <img src="./logo4.png" alt="Logo" style="height: 75px;">
+      </a>
+      <form class="d-flex flex-grow-1 mx-3 position-relative">
+        <input id="searchInput" class="form-control rounded-start border-0 shadow-sm" type="search" placeholder="Buscar productos, marcas y más..." aria-label="Search" autocomplete="off">
+        <button class="btn btn-light border-start-0 rounded-end" type="submit"><i class="bi bi-search"></i></button>
+        <div id="searchResults" class="position-absolute bg-white shadow rounded mt-1 w-100 z-3 d-none" style="top: 100%; max-height: 300px; overflow-y: auto;"></div>
+      </form>
+
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="text-dark fw-semibold text-decoration-none">Categorías</a>
+        <a href="#" class="text-dark"><i class="bi bi-person fs-5"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-cart fs-5"></i></a>
       </div>
     </div>
   </nav>

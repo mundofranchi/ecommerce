@@ -11,32 +11,26 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="#">Mundo Franchi</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMenu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#beneficios">Beneficios</a></li>
-          <li class="nav-item"><a class="nav-link" href="#categorias">Categorías</a></li>
-          <li class="nav-item"><a class="nav-link" href="#marcas">Marcas</a></li>
-          <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
-        </ul>
-        <form class="d-flex search-bar me-3">
-          <input class="form-control" type="search" placeholder="Buscar productos...">
-          <button class="btn" type="submit"><i class="bi bi-search"></i></button>
-        </form>
-        <div class="d-flex align-items-center">
-          <a href="#" class="text-white me-3"><i class="bi bi-person"></i></a>
-          <a href="#" class="text-white"><i class="bi bi-cart"></i></a>
-        </div>
+  <!-- NAVBAR ESTILO MERCADO LIBRE -->
+  <nav class="navbar navbar-expand-lg shadow-sm" style="background-color: #ffe600;">
+    <div class="container align-items-center">
+      <a class="navbar-brand d-flex align-items-center" href="/index.html">
+        <img src="./logo4.png" alt="Logo" style="height: 75px;">
+      </a>
+      <form class="d-flex flex-grow-1 mx-3 position-relative">
+        <input id="searchInput" class="form-control rounded-start border-0 shadow-sm" type="search" placeholder="Buscar productos, marcas y más..." aria-label="Search" autocomplete="off">
+        <button class="btn btn-light border-start-0 rounded-end" type="submit"><i class="bi bi-search"></i></button>
+        <div id="searchResults" class="position-absolute bg-white shadow rounded mt-1 w-100 z-3 d-none" style="top: 100%; max-height: 300px; overflow-y: auto;"></div>
+      </form>
+
+      <div class="d-flex align-items-center gap-3">
+        <a href="#" class="text-dark fw-semibold text-decoration-none">Categorías</a>
+        <a href="#" class="text-dark"><i class="bi bi-person fs-5"></i></a>
+        <a href="#" class="text-dark"><i class="bi bi-cart fs-5"></i></a>
       </div>
     </div>
   </nav>
+
 
   <!-- HERO SLIDER -->
   <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -111,19 +105,15 @@
     </div>
   </section>
 
-  <!-- PRODUCTOS (desde Firestore) -->
-  <section id="productos" class="container my-5">
-    <h2 class="section-title">Nuestros Productos</h2>
-    <div id="productosCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner" id="productos-carousel-inner"></div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#productosCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#productosCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
-    </div>
-  </section>
+  <!-- PRODUCTOS SCROLL -->
+<section id="productos" class="container my-5">
+  <h2 class="section-title">Nuestros Productos</h2>
+  <div class="row" id="productos-grid"></div>
+  <div class="text-center mt-4">
+    <button id="btn-ver-mas" class="btn btn-outline-primary"> Ver más productos</button>
+  </div>
+</section>
+
   
   <!-- MARCAS -->
 <section id="marcas" class="bg-dark py-5">
@@ -329,25 +319,29 @@
     <p>Somos una tienda especializada en herramientas eléctricas y a batería. Brindamos calidad, garantía y entrega rápida en todo el país.</p>
   </section>
 
-  <!-- ============================= -->
+<!-- ============================= -->
 <!-- SECCIÓN: PRODUCTOS MÁS VENDIDOS -->
 <!-- ============================= -->
-<section id="top-products" class="py-5 bg-light position-relative">
+<section id="top-products" class="py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-4" style="font-size:2.5rem; font-weight:700;">
       Productos <span style="color:var(--clr-primary);">más vendidos</span>
     </h2>
-    <div class="top-products-wrapper position-relative">
-      <button class="tp-btn prev">&lt;</button>
-      <div class="top-products-list d-flex align-items-center">
-        <!-- Aquí inyectaremos los círculos desde Firestore -->
-      </div>
-      <button class="tp-btn next">&gt;</button>
+
+    <div class="row" id="mas-vendidos-grid">
+      <!-- Productos se insertan aquí -->
     </div>
   </div>
 </section>
 
+
 <style>
+  .producto-card {
+    transition: box-shadow 0.3s ease;
+  }
+  .producto-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
   /* === CARRUSEL CIRCULAR (mantén las variables de tu CSS principal) === */
   .top-products-wrapper { overflow: hidden; }
   .top-products-list {
@@ -428,144 +422,178 @@
   <!-- Firebase + Firestore + Poblado de productos -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
-      authDomain: "casafranchi-ff656.firebaseapp.com",
-      projectId: "casafranchi-ff656",
-      storageBucket: "casafranchi-ff656.appspot.com",
-      messagingSenderId: "336476209274",
-      appId: "1:336476209274:web:fba9994666d0656817bc3",
-      measurementId: "G-NZMERBW9EQ"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    db.collection("productos").get().then(snapshot => {
-  // 1) Array para guardar todos los datos de cada producto
-  const productos = [];
-  // 2) Array de strings con el HTML de cada tarjeta
-  const cards = [];
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
+    authDomain: "casafranchi-ff656.firebaseapp.com",
+    projectId: "casafranchi-ff656",
+    storageBucket: "casafranchi-ff656.appspot.com",
+    messagingSenderId: "336476209274",
+    appId: "1:336476209274:web:fba9994666d0656817bc3",
+    measurementId: "G-NZMERBW9EQ"
+  };
 
-    const listEl = document.querySelector('#top-products .top-products-list');
-  const placeholder = 'https://via.placeholder.com/180';
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-  firebase.firestore()
-    .collection("productos")
-    .limit(6)
-    .get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        // Ahora usamos imagen1_base64 directamente
-        const imgSrc = d.imagen1_base64
-          ? `data:image/jpeg;base64,${d.imagen1_base64}`
-          : placeholder;
+  const contenedor = document.getElementById('productos-grid');
+  const btnVerMas = document.getElementById('btn-ver-mas');
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
 
-        const div = document.createElement('div');
-        div.className = 'product-circle';
-        div.innerHTML = `
-          <img src="${imgSrc}" alt="${d.producto}">
-          <div class="info">
-            <strong>${d.producto}</strong><br>
-            <span>$${Math.round(d.csi_cem).toLocaleString()}</span>
-          </div>
-        `;
-        listEl.appendChild(div);
-      });
-    })
-    .catch(err => console.error("Error cargando top products:", err));
+  let productos = [];
+  let cantidadMostrada = 0;
+  const productosPorBloque = 20;
 
-  document.querySelector('.prev').addEventListener('click', () => {
-    listEl.scrollBy({ left: -200, behavior: 'smooth' });
-  });
-  document.querySelector('.next').addEventListener('click', () => {
-    listEl.scrollBy({ left:  200, behavior: 'smooth' });
-  });
-  // Recorro los docs y construyo productos[] y cards[]
-  snapshot.forEach(doc => {
-    const d = { id: doc.id, ...doc.data() };
-    productos.push(d);
-    const idx = productos.length - 1;
+  // Renderiza productos en el contenedor
+  function renderProductos() {
+    const productosAMostrar = productos.slice(cantidadMostrada, cantidadMostrada + productosPorBloque);
 
-    cards.push(`
-      <div class="col-md-4">
+    productosAMostrar.forEach((d, i) => {
+      if (!d.imagen1_base64 || d.imagen1_base64.trim() === '') return;
+      const idx = cantidadMostrada + i;
+      const div = document.createElement('div');
+      div.className = "product-col mb-4";
+      div.innerHTML = `
         <div class="card producto-card mb-4" data-index="${idx}">
-          <img 
-            src="data:image/jpeg;base64,${d.imagen1_base64}" 
-            class="card-img-top js-ver-detalle" 
-            alt="${d.producto}" 
-            style="cursor:pointer;"
-          >
+          <img src="data:image/jpeg;base64,${d.imagen1_base64}" class="card-img-top js-ver-detalle" alt="${d.producto}" style="cursor:pointer;">
           <div class="card-body">
             <h5 class="card-title">${d.producto}</h5>
-            <p class="card-text">${d.caracteristica||''}</p>
-            <div class="price">$${Math.round(d.csi_cem).toLocaleString()}</div>
-            <!-- Botones -->
-            <button class="btn btn-primary btn-comprar-ahora w-100 mt-3">
-              Comprar ahora
-            </button>
-            <button class="btn btn-outline-primary btn-agregar-carrito w-100 mt-2">
-              Agregar al carrito
-            </button>
+            <p class="card-text">${d.caracteristica || ''}</p>
+            <div class="price">$${Math.round(d.cem).toLocaleString()}</div>
+            <div class="beneficios">Envio gratis + 6 c/ sin interes + Descuento en transferencia</div>
+            <button class="btn btn-primary btn-comprar-ahora w-100 mt-3">Comprar ahora</button>
+            <button class="btn btn-outline-primary btn-agregar-carrito w-100 mt-2">Agregar al carrito</button>
           </div>
-        </div>
-      </div>
-    `);
-  });
+        </div>`;
+      contenedor.appendChild(div);
+    });
 
-  // Construyo los slides de a 3 tarjetas
-  const slides = [];
-  for (let i = 0; i < cards.length; i += 3) {
-    slides.push(`
-      <div class="carousel-item ${i === 0 ? 'active' : ''}">
-        <div class="row justify-content-center">
-          ${cards.slice(i, i + 3).join('')}
-        </div>
-      </div>
-    `);
+    cantidadMostrada += productosAMostrar.length;
+    if (cantidadMostrada >= productos.length) btnVerMas.style.display = 'none';
+
+    setListeners();
   }
-  document.getElementById("productos-carousel-inner").innerHTML = slides.join('');
 
-  // --- Ahora los event listeners ---
+  // Listeners de botones y productos
+  function setListeners() {
+    document.querySelectorAll('.js-ver-detalle').forEach(img => {
+      img.addEventListener('click', e => {
+        const idx = e.target.closest('.producto-card').dataset.index;
+        const producto = productos[idx];
+        localStorage.setItem('detalleProducto', JSON.stringify(producto));
+        window.location.href = 'detalleproducto.html';
+      });
+    });
 
-  // 2) Hacer click en la imagen => ir a detalle
-  document.querySelectorAll('.js-ver-detalle').forEach(img => {
-    img.addEventListener('click', e => {
-      const idx = e.target.closest('.producto-card').dataset.index;
-      const producto = productos[idx];
-      localStorage.setItem('detalleProducto', JSON.stringify(producto));
+    document.querySelectorAll('.btn-comprar-ahora').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const idx = e.target.closest('.producto-card').dataset.index;
+        const producto = productos[idx];
+        localStorage.setItem('detalleProducto', JSON.stringify(producto));
+        window.location.href = 'detalleproducto.html';
+      });
+    });
+
+    document.querySelectorAll('.btn-agregar-carrito').forEach(btn => {
+      btn.addEventListener('click', e => {
+        const idx = e.target.closest('.producto-card').dataset.index;
+        const producto = productos[idx];
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        carrito.push(producto);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        alert(`"${producto.producto}" agregado al carrito.`);
+        actualizarContadorCarrito?.();
+      });
+    });
+  }
+
+  // Buscar en la lista de productos local
+  searchInput.addEventListener('input', () => {
+    const search = searchInput.value.toLowerCase();
+    if (search === '') {
+      searchResults.classList.add('d-none');
+      return;
+    }
+
+    const filtered = productos.filter(prod =>
+      prod.producto.toLowerCase().includes(search) ||
+      prod.marca?.toLowerCase().includes(search) ||
+      prod.caracteristica?.toLowerCase().includes(search)
+    );
+
+    renderSearchResults(filtered);
+  });
+
+  function renderProductosMasVendidos() {
+  const masVendidos = productos.filter(p => p.mas_vendido); // filtra los más vendidos
+  const grid = document.getElementById('mas-vendidos-grid');
+
+  masVendidos.forEach((d, i) => {
+    const div = document.createElement('div');
+    div.className = "col-md-4 mb-4";
+    div.innerHTML = `
+      <div class="card producto-card" data-index="${i}">
+        <span class="badge-top">🔥 MÁS VENDIDO</span>
+        <img src="data:image/jpeg;base64,${d.imagen1_base64}" class="card-img-top js-ver-detalle" alt="${d.producto}" style="cursor:pointer;">
+        <div class="card-body">
+          <h5 class="card-title">${d.producto}</h5>
+          <p class="card-text">${d.caracteristica || ''}</p>
+          <div class="price fw-bold text-primary fs-5">$${Math.round(d.csi_cem).toLocaleString()}</div>
+          <button class="btn btn-primary btn-comprar-ahora w-100 mt-3">Comprar ahora</button>
+          <button class="btn btn-outline-primary btn-agregar-carrito w-100 mt-2">Agregar al carrito</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+
+  setListeners();
+}
+
+
+  function renderSearchResults(productosFiltrados) {
+  searchResults.innerHTML = '';
+  if (productosFiltrados.length === 0) {
+    searchResults.classList.add('d-none');
+    return;
+  }
+
+  productosFiltrados.slice(0, 10).forEach(prod => {
+    const div = document.createElement('div');
+    div.className = 'search-item';
+    div.onclick = () => {
+      localStorage.setItem('detalleProducto', JSON.stringify(prod));
       window.location.href = 'detalleproducto.html';
-    });
+    };
+    div.innerHTML = `
+      <img src="data:image/jpeg;base64,${prod.imagen1_base64}" alt="${prod.producto}">
+      <div class="search-item-info">
+        <h6>${prod.producto}</h6>
+        <div class="price">$${Math.round(prod.csi_cem).toLocaleString()}</div>
+      </div>`;
+    searchResults.appendChild(div);
   });
 
-  // 3) Comprar ahora: guarda y va a detalle
-  document.querySelectorAll('.btn-comprar-ahora').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const idx = e.target.closest('.producto-card').dataset.index;
-      const producto = productos[idx];
-      localStorage.setItem('detalleProducto', JSON.stringify(producto));
-      window.location.href = 'detalleproducto.html';
-    });
+  searchResults.classList.remove('d-none');
+}
+
+
+  // Cargar productos al inicio
+  db.collection("productos").get().then(snapshot => {
+    productos = [];
+    snapshot.forEach(doc => productos.push({ id: doc.id, ...doc.data() }));
+    renderProductos();
+    renderProductosMasVendidos();
   });
 
-  // 4) Agregar al carrito: guarda en array en localStorage
-  document.querySelectorAll('.btn-agregar-carrito').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const idx = e.target.closest('.producto-card').dataset.index;
-      const producto = productos[idx];
-      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-      carrito.push(producto);
-      localStorage.setItem('carrito', JSON.stringify(carrito));
-      // opcional: notificar al usuario
-      alert(`"${producto.producto}" agregado al carrito.`);
-    });
-  });
-
-});
+  btnVerMas.addEventListener('click', renderProductos);
+</script>
 
 
-  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
@@ -591,7 +619,7 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background-color: orange;
+        background-color: rgb(255, 238, 0);
         color: black;
         border-radius: 50px;
         padding: 12px 16px;
@@ -656,7 +684,7 @@
         height: 60px;
         object-fit: cover;
         border-radius: 8px;
-        border: 2px solid #ff6a00;
+        border: 2px solid #0400ff;
       }
 
       .carrito-detalle {
@@ -672,13 +700,13 @@
 
       .producto-precio {
         font-size: 15px;
-        color: #ff6a00;
+        color: #0400ff;
       }
 
       .btn-eliminar {
         background: transparent;
         border: none;
-        color: #ff6a00;
+        color: #0400ff;
         font-size: 18px;
         cursor: pointer;
         font-weight: bold;
@@ -687,13 +715,13 @@
       }
 
       .btn-eliminar:hover {
-        color: #cc5200;
+        color: #ffee00;
       }
 
       .btn-finalizar-compra {
         display: block;
         margin-top: 25px;
-        background-color: #ff6a00;
+        background-color: #0400ff;
         color: white;
         padding: 12px;
         text-align: center;
@@ -704,8 +732,8 @@
       }
 
       .btn-finalizar-compra:hover {
-        background-color: #e55d00;
-      }
+        background-color: #3d39ff;
+      } 
 
       .carrito-vacio {
         text-align: center;
@@ -769,7 +797,7 @@ function renderizarCarrito() {
     const botonFinalizar = document.createElement('a');
     botonFinalizar.href = 'finalizarcompra.html';
     botonFinalizar.className = 'btn-finalizar-compra';
-    botonFinalizar.innerText = 'Finalizar compra 🛍️';
+    botonFinalizar.innerText = 'Finalizar compra ';
     contenedor.appendChild(botonFinalizar);
   } else {
     contenedor.innerHTML = '<p class="carrito-vacio">🛒 Tu carrito está vacío</p>';
