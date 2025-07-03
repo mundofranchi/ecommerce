@@ -162,6 +162,59 @@
     footer h5 { font-weight:600; margin-bottom:.5rem; }
     footer a { color: var(--naranja); transition: color var(--transition); }
     footer a:hover { color: var(--blanco); }
+    /* 🔍 Estilo PRO para resultados de búsqueda */
+    #searchResults {
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .search-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f1f1f1;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .search-item:hover {
+      background: #f9f9f9;
+    }
+
+    .search-item img {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .search-item-info {
+      flex: 1;
+    }
+
+    .search-item-info h6 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #111;
+      line-height: 1.2;
+    }
+
+    .search-item-info .price {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1b5e20;
+      margin-top: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -178,7 +231,6 @@
         <button class="btn btn-light border-start-0 rounded-end" type="submit"><i class="bi bi-search"></i></button>
         <div id="searchResults" class="position-absolute bg-white shadow rounded mt-1 w-100 z-3 d-none" style="top: 100%; max-height: 300px; overflow-y: auto;"></div>
       </form>
-
       <div class="d-flex align-items-center gap-3">
         <a href="#" class="text-dark fw-semibold text-decoration-none">Categorías</a>
         <a href="#" class="text-dark"><i class="bi bi-person fs-5"></i></a>
@@ -305,7 +357,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDw-4Tm4FgNPhAHEbvcrjFXICzU3lXGD_g",
@@ -318,9 +370,19 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
-
+  
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  let productos = []; // productos cargados desde Firebase
+  getDocs(collection(db, "productos")).then(snapshot => {
+    productos = [];
+    snapshot.forEach(doc => productos.push({ id: doc.id, ...doc.data() }));
+  });
+
+  let resultadosBusquedaActual = [];
 
   if (!id) {
     document.body.innerHTML = '<p class="text-center mt-5">Producto no encontrado.</p>';
@@ -388,6 +450,34 @@
     thumbsContainer.appendChild(thumb);
   });
 
+  searchInput.addEventListener('input', () => {
+    const search = searchInput.value.toLowerCase();
+    if (search === '') {
+      resultadosBusquedaActual = [];
+      searchResults.classList.add('d-none');
+      return;
+    }
+
+    resultadosBusquedaActual = productos.filter(prod =>
+      prod.producto.toLowerCase().includes(search) ||
+      prod.marca?.toLowerCase().includes(search) ||
+      prod.caracteristica?.toLowerCase().includes(search)
+    );
+
+    renderSearchResults(resultadosBusquedaActual);
+  });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // evita envío del form
+      if (resultadosBusquedaActual.length > 0) {
+        const primero = resultadosBusquedaActual[0];
+        window.location.href = `detalleproducto.html?id=${primero.id}`;
+      }
+    }
+  });
+
+
   // Especificaciones
   document.getElementById('spec-codigo').textContent = detalle.codigo;
   document.getElementById('spec-costo').textContent = '$' + Math.round(detalle.costo).toLocaleString();
@@ -410,6 +500,32 @@
     localStorage.setItem('compraInmediata', JSON.stringify(detalle));
     window.location.href = 'finalizarcompra.html';
   });
+
+  function renderSearchResults(productosFiltrados) {
+    searchResults.innerHTML = '';
+    if (productosFiltrados.length === 0) {
+      searchResults.classList.add('d-none');
+      return;
+    }
+
+    productosFiltrados.slice(0, 10).forEach(prod => {
+      const div = document.createElement('div');
+      div.className = 'search-item';
+      div.onclick = () => {
+        window.location.href = `detalleproducto.html?id=${prod.id}`;
+      };
+      div.innerHTML = `
+        <img src="data:image/jpeg;base64,${prod.imagen1_base64}" alt="${prod.producto}">
+        <div class="search-item-info">
+          <h6>${prod.producto}</h6>
+          <div class="price">$${Math.round(prod.csi_cem).toLocaleString()}</div>
+        </div>`;
+      searchResults.appendChild(div);
+    });
+
+    searchResults.classList.remove('d-none');
+  }
+
 </script>
 </body>
 </html>
