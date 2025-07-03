@@ -3,6 +3,7 @@ import base64
 import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, firestore
+import math
 
 # === CONFIGURACIÓN FIREBASE ===
 try:
@@ -44,6 +45,7 @@ def img_to_base64(nombre_sin_extension, carpeta="subir"):
     print(f"⚠️ Imagen no encontrada: {nombre_sin_extension} (no se encontró con ninguna extensión)")
     return ""
 
+
 # === RECORRER Y SUBIR ===
 errores = []
 for i, row in df.iterrows():
@@ -51,7 +53,7 @@ for i, row in df.iterrows():
         doc_id = str(row["Codigo"]).strip()
         if not doc_id:
             raise ValueError("Código vacío")
-
+        stock_val = row.get("Stock")
         imagen1 = img_to_base64(row.get("IMAGEN1", ""))
         imagen2 = img_to_base64(row.get("IMAGEN2", ""))
 
@@ -60,13 +62,13 @@ for i, row in df.iterrows():
             "producto": str(row.get("PRODUCTO", "")).strip(),
             "marca": str(row.get("Marca", "")).strip(),
             "caracteristica": str(row.get("Caracteristica", "")).strip(),
-            "costo": int(row.get("Costo", 0)),
-            "c_ganancia": int(row.get("C GANANCIA", 0)),
-            "cem": float(row.get("CEM", 0)),
-            "csi_cem": float(row.get("6 CSI + CEM", 0)),
+            "costo": int(row.get("Costo") or 0),
+            "c_ganancia": int(row.get("C GANANCIA") or 0),
+            "cem": float(row.get("CEM") or 0),
+            "csi_cem": float(row.get("6 CSI + CEM") or 0),
             "imagen1_base64": imagen1,
             "imagen2_base64": imagen2,
-            "stock": int(row.get("Stock", 0)),
+            "stock": int(stock_val) if stock_val and not pd.isna(stock_val) else 0,
         }
 
         db.collection("productos").document(doc_id).set(data)

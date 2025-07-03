@@ -471,8 +471,7 @@
       img.addEventListener('click', e => {
         const idx = e.target.closest('.producto-card').dataset.index;
         const producto = productos[idx];
-        localStorage.setItem('detalleProducto', JSON.stringify(producto));
-        window.location.href = 'detalleproducto.html';
+        window.location.href = `detalleproducto.html?id=${producto.id}`;
       });
     });
 
@@ -481,7 +480,7 @@
         const idx = e.target.closest('.producto-card').dataset.index;
         const producto = productos[idx];
         localStorage.setItem('detalleProducto', JSON.stringify(producto));
-        window.location.href = 'detalleproducto.html';
+        window.location.href = `detalleproducto.html?id=${producto.id}`;
       });
     });
 
