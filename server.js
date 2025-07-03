@@ -11,7 +11,8 @@ const { MercadoPagoConfig, Preference } = require('mercadopago');
 const app = express();
 console.log('🔐 MP_ACCESS_TOKEN desde entorno:', process.env.MP_ACCESS_TOKEN?.slice(0, 25) + '...');
 app.use(cors({
-  origin: 'https://mundofranchi.onrender.com'
+  origin: 'https://casafranchionline.com', // habilita SOLO tu dominio
+  credentials: true
 }));
 app.use(express.json());
 

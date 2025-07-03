@@ -269,17 +269,9 @@
         <section id="step-2" class="d-none">
           <div class="card-section">
             <h2>2. Método de Pago</h2>
-            <div class="payment-option" onclick="selectPay('tarjeta')" id="opt-tarjeta">
-              <input type="radio" name="metodo" value="Tarjeta de Crédito">
-              <strong>Tarjeta de Crédito</strong>
-            </div>
             <div class="payment-option" onclick="selectPay('mercadopago')" id="opt-mercadopago">
               <input type="radio" name="metodo" value="MercadoPago">
-              <strong>MercadoPago</strong>
-            </div>
-            <div class="payment-option" onclick="selectPay('transferencia')" id="opt-transferencia">
-              <input type="radio" name="metodo" value="Transferencia Bancaria">
-              <strong>Transferencia Bancaria</strong>
+              <strong>MercadoPago / Tarjeta / Efectivo / Transferencia</strong>
             </div>
             <div class="mt-4 d-flex justify-content-between">
               <button class="btn-back" type="button" onclick="goToStep(1)">← Volver</button>
