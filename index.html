@@ -498,21 +498,36 @@
   }
 
   // Buscar en la lista de productos local
+  let resultadosBusquedaActual = [];
+
   searchInput.addEventListener('input', () => {
     const search = searchInput.value.toLowerCase();
     if (search === '') {
+      resultadosBusquedaActual = [];
       searchResults.classList.add('d-none');
       return;
     }
 
-    const filtered = productos.filter(prod =>
+    resultadosBusquedaActual = productos.filter(prod =>
       prod.producto.toLowerCase().includes(search) ||
       prod.marca?.toLowerCase().includes(search) ||
       prod.caracteristica?.toLowerCase().includes(search)
     );
 
-    renderSearchResults(filtered);
+    renderSearchResults(resultadosBusquedaActual);
   });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // evita que envíe el form
+      if (resultadosBusquedaActual.length > 0) {
+        const primero = resultadosBusquedaActual[0];
+        window.location.href = `detalleproducto.html?id=${primero.id}`;
+      }
+    }
+  });
+
+
 
   function renderProductosMasVendidos() {
   const masVendidos = productos.filter(p => p.mas_vendido); // filtra los más vendidos
@@ -552,8 +567,7 @@
     const div = document.createElement('div');
     div.className = 'search-item';
     div.onclick = () => {
-      localStorage.setItem('detalleProducto', JSON.stringify(prod));
-      window.location.href = 'detalleproducto.html';
+      window.location.href = `detalleproducto.html?id=${prod.id}`;
     };
     div.innerHTML = `
       <img src="data:image/jpeg;base64,${prod.imagen1_base64}" alt="${prod.producto}">
@@ -566,6 +580,7 @@
 
   searchResults.classList.remove('d-none');
 }
+
 
 
   // Cargar productos al inicio

@@ -38,9 +38,9 @@ app.post('/create_preference', async (req, res) => {
     const pref = {
       items,
       back_urls: {
-        success: `https://www.youtube.com/watch?v=ID-iJOw9rLo`,
-        pending: `https://www.youtube.com/watch?v=ID-iJOw9rLo`,
-        failure: `https://www.youtube.com/watch?v=ID-iJOw9rLo`
+        success: `https://casafranchionline.com/`,
+        pending: `https://casafranchionline.com/`,
+        failure: `https://casafranchionline.com/`
       },
       auto_return: 'approved'
     };
