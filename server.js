@@ -11,7 +11,7 @@ const { MercadoPagoConfig, Preference } = require('mercadopago');
 const app = express();
 console.log('🔐 MP_ACCESS_TOKEN desde entorno:', process.env.MP_ACCESS_TOKEN?.slice(0, 25) + '...');
 app.use(cors({
-  origin: 'https://casafranchionline.com',
+  origin: 'https://MundoFranchionline.com',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
   credentials: true
@@ -41,9 +41,9 @@ app.post('/create_preference', async (req, res) => {
     const pref = {
       items,
       back_urls: {
-        success: `https://casafranchionline.com/`,
-        pending: `https://casafranchionline.com/`,
-        failure: `https://casafranchionline.com/`
+        success: `https://MundoFranchionline.com/`,
+        pending: `https://MundoFranchionline.com/`,
+        failure: `https://MundoFranchionline.com/`
       },
       auto_return: 'approved'
     };
